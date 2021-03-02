@@ -1,0 +1,2 @@
+language = "java"
+run = "java cmis141/Week1/MillerRaymone_Asgn1/src/main/java/com/miller/millerraymone_asgn1/MillerRaymone_Asgn1.java"
