@@ -13,9 +13,9 @@ public class MillerRaymone_Week2Disc {
             // Collect input for mass and velocity
             System.out.println(
                     "Lets calculate the Kinetic energy of an object in motion");
-            System.out.println("What is the mass of the object, in kg? ");
+            System.out.print("What is the mass of the object, in kg? ");
             double mass = input.nextDouble();
-            System.out.println("What is the velocity of the object, in m/s? ");
+            System.out.print("What is the velocity of the object, in m/s? ");
             double velocity = input.nextDouble();
             // Calculate kinetic energy
             int ke = kinetic_energy(mass, velocity);
@@ -45,22 +45,22 @@ public class MillerRaymone_Week2Disc {
         String ke_str = convert_joules(kinetic_energy);
         if(kinetic_energy >= (int) Math.pow(10, 15))
             System.out.printf(
-                    "That's %s of energy. That's more than the Tsar Bomba!",
+                    "That's %s of energy. That's more than the Tsar Bomba!\n",
                     ke_str);
         else if(kinetic_energy >= (int) (63 * Math.pow(10, 15)))
             System.out.printf(
-                    "That's %s of energy. That's more than the Little Boy Bomb!",
+                    "That's %s of energy. That's more than the Little Boy Bomb!\n",
                     ke_str);
         else if(kinetic_energy >= (int) (6 * Math.pow(10, 9)))
             System.out.printf(
-                    "That's %s of energy. That's more than the energy of 1 barrel of exploding petroleum.",
+                    "That's %s of energy. That's more than the energy of 1 barrel of exploding petroleum.\n",
                     ke_str);
         else if(kinetic_energy >= 1600)
             System.out.printf(
-                    "That's %s of energy. That's about the power of a boxer's punch.",
+                    "That's %s of energy. That's about the power of a boxer's punch.\n",
                     ke_str);
         else
-            System.out.printf("That's %s of energy.", ke_str);
+            System.out.printf("That's %s of energy.\n", ke_str);
     }
 
     /**
