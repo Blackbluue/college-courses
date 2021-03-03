@@ -36,11 +36,11 @@ public class DiscWeek2 {
         System.out.print("Enter integer number for side B of right triangle: ");
         int sideB = scanint.nextInt(); // Wait for user to type in integer number.
 
-        System.out.print("Enter integer number for height of prism");
+        System.out.print("Enter integer number for height of prism: ");
         int height = scanint.nextInt();
 
         // Calculate the length of side C.
-        double sideC = Math.sqrt((sideA * sideA) + (sideB * sideB)); //Pythagorean theorem.
+        int sideC = (int) Math.sqrt((sideA * sideA) + (sideB * sideB)); //Pythagorean theorem.
 
         // Calculate the volume of the prism.
         double volume = 0.25 * height * Math.sqrt(
@@ -48,14 +48,15 @@ public class DiscWeek2 {
                 * (sideC + sideA - sideB) * (sideA + sideB - sideC));
 
         // Display the output.
-        System.out.println("The length of side C is: " + sideC); // Print result of calculation.
+        System.out.println("\nThe length of side C is: " + sideC); // Print result of calculation.
+        System.out.printf("The volume is %f\n", volume);
         System.out.println(); // Print an empty line.
         System.out.println(
                 "Pythagorean theorem states that " + sideC + " = the sqaure root of "
                 + sideA + "^2" + " + " + sideB + "^2"); // Print student data.
         System.out.printf(
                 "Volume of the triangular prism is 1/4 * %d * "
-                + "√((%d + %d + %f)(%d + %f - %d)(%f + %d - %d)(%d + %d - %f)) = %f",
+                + "√((%d + %d + %d)(%d + %d - %d)(%d + %d - %d)(%d + %d - %d)) = %f\n",
                 height, sideA, sideB, sideC, sideB, sideC, sideA, sideC, sideA,
                 sideB, sideA, sideB, sideC, volume);
 
