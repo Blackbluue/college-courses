@@ -1,2 +1,2 @@
 language = "java"
-run = "java cmis141/Week2/MillerRaymone_Week2Disc/src/main/java/com/miller/millerraymone_week2disc/MillerRaymone_Week2Disc.java"
+run = "java cmis141/Week2/MillerRaymone_Week2Disc/src/main/java/com/miller/millerraymone_week2disc/DiscWeek2.java"
