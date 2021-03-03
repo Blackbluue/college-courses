@@ -42,7 +42,8 @@ public class MillerRaymone_Week2Disc {
      * @param kinetic_energy The kinetic energy of the object.
      */
     private static void display_output(int kinetic_energy) {
-        String ke_str = convert_joules(kinetic_energy);
+        String ke_str = convert_joules(kinetic_energy);  // int to string
+        // Change output based the amount of joules
         if(kinetic_energy >= (int) Math.pow(10, 15))
             System.out.printf(
                     "That's %s of energy. That's more than the Tsar Bomba!\n",
