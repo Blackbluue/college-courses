@@ -11,14 +11,18 @@ import java.util.Scanner;
 
 public class MillerRaymone_Week3Disc {
     public static void main(String[] args) {
+        // generate random answer
         int answer = (int) (Math.random() * 100);
 
+        // get user input
         System.out.println("Lets play a game! Guess the number I'm thinking of");
         try( Scanner sc = new Scanner(System.in)) {
             System.out.print("Enter a number between 0 and 99: ");
             int input = sc.nextInt();
+            // how close was the guess to the answer
             int difference = Math.abs(answer - input);
-            if(input >= 100 || input < 0)
+            // conditional based on how close the answer was
+            if(input >= 100 || input < 0)  // input was out of bounds
                 System.out.println("That number wasn't even the range.");
             else if(difference == 0)
                 System.out.println("Congrats, you guessed my number!");
