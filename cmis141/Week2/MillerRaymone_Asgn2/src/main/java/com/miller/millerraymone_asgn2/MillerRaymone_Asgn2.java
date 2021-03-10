@@ -12,10 +12,7 @@ import java.util.Scanner;
 public class MillerRaymone_Asgn2 {
 
     public static void main(String[] args) {
-        /*
-        begin 'try' clause
-        'catch' clauses to handle exceptions
-        */
+        // begin 'try' clause, 'catch' clauses to handle exceptions
         try {
             // get user input
             Object[] input = get_user_input();
@@ -65,9 +62,6 @@ public class MillerRaymone_Asgn2 {
         }
     }
 
-    /**
-     * 
-     */
     public static Object[] get_user_input() {
         // create scanner for user input
         Scanner sc = new Scanner(System.in);
@@ -91,9 +85,7 @@ public class MillerRaymone_Asgn2 {
             throw new RuntimeException(
                 String.format("'%c' is not a valid operation", symbol));
 
-        /*
-        return an array to hold all input since java cannot unpack varaibles
-        */
+        // return an array to hold all input since java cannot unpack variables
         return new Object[]{num1, num2, symbol};
     }
 }
