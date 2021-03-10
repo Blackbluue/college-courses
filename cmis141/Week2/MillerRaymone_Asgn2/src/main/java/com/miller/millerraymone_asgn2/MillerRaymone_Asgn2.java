@@ -15,7 +15,7 @@ public class MillerRaymone_Asgn2 {
         // begin 'try' clause, 'catch' clauses to handle exceptions
         try {
             // get user input
-            Object[] input = get_user_input();
+            Object[] input = getUserInput();
             int num1 = (int) input[0];
             int num2 = (int) input[1];
             char symbol = (char) input[2];
@@ -26,22 +26,22 @@ public class MillerRaymone_Asgn2 {
             */
             switch(symbol) {
                 case '+':
-                    System.out.printf("%d %c %d = %d\n",
+                    System.out.printf("Evaluation: %d %c %d = %d\n",
                         num1, symbol, num2, num1 + num2);
                     break;
                 case '-':
-                    System.out.printf("%d %c %d = %d\n",
+                    System.out.printf("Evaluation: %d %c %d = %d\n",
                         num1, symbol, num2, num1 - num2);
                     break;
                 case '*':
-                    System.out.printf("%d %c %d = %d\n",
+                    System.out.printf("Evaluation: %d %c %d = %d\n",
                         num1, symbol, num2, num1 * num2);
                     break;
                 case '/':
                     if (num2 == 0)
                         System.out.println("Cannot divide by 0");
                     else
-                        System.out.printf("%d %c %d = %f\n",
+                        System.out.printf("Evaluation: %d %c %d = %f\n",
                             num1, symbol, num2, (double) num1 / num2);
                     break;
                 default:  // this case should never happen
@@ -62,7 +62,7 @@ public class MillerRaymone_Asgn2 {
         }
     }
 
-    public static Object[] get_user_input() {
+    public static Object[] getUserInput() {
         // create scanner for user input
         Scanner sc = new Scanner(System.in);
 
