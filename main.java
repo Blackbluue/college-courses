@@ -1,76 +1,48 @@
 /**
- * File: MillerRaymone_Week4Disc.java
+ * File: MillerRaymone_Asgn3.java
  * Author: Miller, Raymone
- * Class:  CMIS 141 - Discussion 4
- * Creation Date: (10MAR21)
- * Description: Build a randomly generated quilt
+ * Class:  CMIS 141 - Assignment 3
+ * Creation Date: (12MAR21)
+ * Description: Calculate a student's grade
  */
-package com.miller.millerraymone_week4disc;
+package com.miller.millerraymone_asgn3;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Scanner;
 
-public class MillerRaymone_Week4Disc {
-
+public class MillerRaymone_Asgn3 {
     public static void main(String[] args) {
-        // define quilt patterns
-        Map<Integer, String> patterns = new HashMap<>();
-        patterns.put(0, "}IV^\\A/^VI{");
-        patterns.put(1, "\\|/-\\|/-\\|/");
-        patterns.put(2, "/|\\-/|\\-/|\\");
-        patterns.put(3, "*~^~^~^~^~*");
-        patterns.put(4, ">_<_>_<_>_<");
-        patterns.put(5, "=+-_\\_/_-+=");
-        patterns.put(6, "|||||||||||");
-        patterns.put(7, "___________");
-        patterns.put(8, "-----------");
-        patterns.put(9, "[/T_}-{_T\\]");
-        patterns.put(10, "-({[<#>]})-");  // wont show in random
-        String quiltStart = patterns.get(6) + "\n"
-                + patterns.get(7) + "\n"
-                + patterns.get(8);
-        String quiltEnd = patterns.get(7) + "\n"
-                + patterns.get(8) + "\n"
-                + patterns.get(6);
-
-        // get user input
-        System.out.println("Lets make a quilt together. "
-                + "How large do you want it?");
         Scanner sc = new Scanner(System.in);
-        System.out.print("Number of rows: ");
-        int counter = Math.abs(sc.nextInt());
+        boolean repeat = true;
 
-        int halfway;
-        boolean odd;
-        // if counter is odd, middle row will be preset
-        if(counter % 2 != 0) {
-            halfway = (counter + 1) / 2;
-            odd = true;
-        } else {
-            halfway = counter / 2;
-            odd = false;
-        }
+        do {
+            System.out.print("Do you want to enter student's data? Yes/No => ");
+            input = sc.nextLine().toLowerCase();
+            if(input == "yes")
+                printOutput(getStudentInfo());
+            else if(input == "no")
+                repeat = false;
+            else
+                System.out.println("Invalid input");
+       } while(repeat == true);
+       System.out.println("Thank you for using the grade calculation program");
+    }
 
-        // start quilt
-        LinkedList<String> stack = new LinkedList<>();
-        String pattern;
-        System.out.println("\n" + quiltStart);
-        while(counter > 0) {
-            if(counter > halfway) {  // top half
-                // randomly choose a quilt pattern
-                int choice = (int) (Math.random() * 10);
-                // build quilt from pattern
-                pattern = patterns.get(choice);
-                stack.add(pattern);
-            }else if(odd && counter == halfway)  // center
-                pattern = patterns.get(10);
-            else  // bottom half
-                pattern = stack.removeLast();
-            System.out.println(pattern);
-            counter--;
-        }
-        System.out.println(quiltEnd);
+    public static Map<String, String> getStudentInfo() {
+        Scanner sc = new Scanner(System.in);
+        Map<String, String> info = new HashMap<>();
+
+        System.out.print("Enter student's name => ");
+        info.put("name", sc.nextLine());
+
+        System.out.print("Enter student's grades separated by space: A1 A2 Ex P => ");
+        int[] grades = Arrays.asList(sc.nextLine().split(" ")).
+            mapToInt(grade -> Integer.valueOf(grade)).
+            toArray();
+    }
+
+    public static void printOutput(Map<String, String> info) {
+
     }
 }
