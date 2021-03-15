@@ -26,12 +26,15 @@ public class MillerRaymone_Asgn3 {
             input = sc.nextLine().toLowerCase();
             // decide whether to continue or exit program
             switch(input) {
-                case "yes" ->
+                case "yes":
                     printOutput(getStudentInfo());
-                case "no" ->
+                    break;
+                case "no":
                     repeat = false;
-                default ->
+                    break;
+                default:
                     System.out.println("Invalid input");
+                    break;
             }
         }while(repeat == true);
         System.out.println("Thank you for using the grade calculation program");
