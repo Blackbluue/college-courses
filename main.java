@@ -14,37 +14,20 @@ import java.util.Scanner;
 public class MillerRaymone_Asgn3 {
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        boolean repeat = true;
-
-        do {
-            System.out.print("Do you want to enter student's data? Yes/No => ");
-            input = sc.nextLine().toLowerCase();
-            if(input == "yes")
-                printOutput(getStudentInfo());
-            else if(input == "no")
-                repeat = false;
-            else
-                System.out.println("Invalid input");
-        }while(repeat == true);
-        System.out.println("Thank you for using the grade calculation program");
+        try(Scanner sc = new Scanner(System.in)) {
+            String test;
+            do {
+                System.out.print("Test: ");
+                test = sc.nextLine();
+                System.out.println(test);
+                temp(sc);
+            }while(!test.equals("end"));
+        }
     }
 
-    public static Map<String, String> getStudentInfo() {
-        Scanner sc = new Scanner(System.in);
-        Map<String, String> info = new HashMap<>();
-
-        System.out.print("Enter student's name => ");
-        info.put("name", sc.nextLine());
-
-        System.out.print(
-                "Enter student's grades separated by space: A1 A2 Ex P => ");
-        int[] grades = Arrays.asList(sc.nextLine().split(" ")).
-                mapToInt(grade -> Integer.valueOf(grade)).
-                toArray();
-    }
-
-    public static void printOutput(Map<String, String> info) {
-
+    public static void temp(Scanner sc) {
+        System.out.print("Inner Test: ");
+        String test = sc.nextLine();
+        System.out.println(test);
     }
 }
