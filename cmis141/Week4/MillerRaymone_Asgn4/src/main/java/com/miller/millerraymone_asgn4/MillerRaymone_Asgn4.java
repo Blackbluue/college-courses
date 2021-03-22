@@ -3,7 +3,7 @@
  * Author: Miller, Raymone
  * Class:  CMIS 141 - Assignment 4
  * Creation Date: (19MAR21)
- * Description: 
+ * Description: Builds triangles and diamond shapes, size of which are based on user input
  */
 
 package com.miller.millerraymone_asgn4;
@@ -13,6 +13,7 @@ import java.util.Scanner;
 
 public class MillerRaymone_Asgn4 {
     public static void main(String[] args) {
+        System.out.println("This program will print a triangle and diamond shape.");
         // get user input for triangle
         int input = getInput(
             "How high should the triangle be? ", "Height must be positive: ");
@@ -65,7 +66,7 @@ public class MillerRaymone_Asgn4 {
         int input = 0;  // initialize input to avoid compile error
         boolean goodInput = false;  // sentinal value
         do {
-            try {  // wrap in try to catch scanner exception
+            try {  // wrap in try-block to catch scanner exception
                 input = sc.nextInt();
                 // validate input
                 if(input <= 0)
@@ -73,11 +74,10 @@ public class MillerRaymone_Asgn4 {
                 else
                     goodInput = true;
             } catch(InputMismatchException e) {
-                // user entered a non-number
+                // user entered a non whole number
                 System.out.print("Please enter a whole number: ");
                 sc.nextLine();  // clear scanner of bad input
             }
-            
         }while(goodInput == false);
         // return input
         return input;
