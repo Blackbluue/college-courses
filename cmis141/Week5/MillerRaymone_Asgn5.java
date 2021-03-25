@@ -26,18 +26,26 @@ public class MillerRaymone_Asgn5 {
             choice = displayMenu(sc);
             switch(choice) {
                 case WEIGHT:
+                    System.out.print("\tEnter weight in pounds : ");
+                    double pounds = getUserDouble(sc);
+                    double kilos = poundsToKilograms(pounds);
+                    System.out.printf("\t%.2f lbs = %.2f kg\n", pounds, kilos);
+                    sc.nextLine();
                     break;
                 case HEIGHT:
+                    System.out.print("\tEnter height in inches : ");
+                    double inches = getUserDouble(sc);
+                    double centi = inchesToCentimeters(inches);
+                    System.out.printf("\t%.2f inches = %.2f cm\n", inches, centi);
                     break;
                 case BMI:
+                    System.out.println("\tWorking!\n");
                     break;
                 case QUIT:
+                    System.out.println("\nThank you for using the program. Goodbye!");
                     break;
-                default:
-                    System.out.println("Not a valid choice. Choose again.");
             }
         }while(!choice.equals(QUIT));
-        System.out.println("Thank you for using the program. Goodbye!");
     }
 
     public static String displayMenu(Scanner sc) {
@@ -60,15 +68,36 @@ public class MillerRaymone_Asgn5 {
                     break;
                 default:
                     System.out.println("Not a valid choice. Choose again.");
+                    System.out.println("++" + choice + "++");
             }
         }while(badInput);
         return choice;
     }
 
-    public static double poundsToKilo() {
-        double pounds;
+    public static double getUserDouble(Scanner sc) {
+        double input = -1;
+        boolean badInput = true;
         do {
-            System.out.print("Enter weight in pounds :");
-        }
+            try {
+                input = sc.nextDouble();
+                if(input <= 0)
+                    System.out.print("Please enter a positive number: ");
+                else
+                    badInput = false;
+            } catch(InputMismatchException e) {
+                // user entered a non-number
+                System.out.print("That is not a number. Try again: ");
+                sc.nextLine();  // clear scanner of bad input
+            }
+        }while(badInput);
+        return input;
+    }
+
+    public static double poundsToKilograms(double pounds) {
+        return pounds;
+    }
+
+    public static double inchesToCentimeters(double inches) {
+        return inches;
     }
 }
