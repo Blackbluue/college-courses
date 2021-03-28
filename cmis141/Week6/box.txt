@@ -1,13 +1,17 @@
- ______
-|\------\
-|`\------\
-|``\------\
-|```\______\
-\```|XXXXXX|
- \``|XXXXXX|
-  \`|XXXXXX|
-   \|______|
+ ________
+|\--------\
+|`\--------\
+|``\--------\
+|```\--------\
+\````\________\
+ \```|XXXXXXXX|
+  \``|XXXXXXXX|
+   \`|XXXXXXXX|
+    \|________|
 
-width = 6
+length = 5
+width = 8
 height = 4
-length = 4
+
+max_line_width = width + 3 + (length - 1)
+3 represents the 3 visible edges on each line

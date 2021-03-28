@@ -1,4 +1,4 @@
-language = "java"
+language = "java11"
 # run = "java cmis141/Week4/MillerRaymone_Asgn4/src/main/java/com/miller/millerraymone_asgn4/MillerRaymone_Asgn4.java"
-run = "java cmis141/Week5/MillerRaymone_Asgn5.java"
+run = "java cmis141/Week6/MillerRaymone_Week6Disc.java"
 # run = "java main.java"

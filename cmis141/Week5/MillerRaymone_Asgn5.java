@@ -14,6 +14,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MillerRaymone_Asgn5 {
+    // define constants for program
     static final String WEIGHT = "1";
     static final String HEIGHT = "2";
     static final String BMI = "3";
@@ -23,6 +24,7 @@ public class MillerRaymone_Asgn5 {
     static final int BMI_CONVERSION = 10_000;
 
     public static void main(String[] args) {
+        // define variables used in main method
         Scanner sc = new Scanner(System.in);
         String choice;
         double pounds;
@@ -30,28 +32,30 @@ public class MillerRaymone_Asgn5 {
         double inches;
         double centi;
         double bmi;
+        // do..while loop to drive main program
         do {
-            choice = displayMenu(sc);
-            switch(choice) {
-                case WEIGHT:
+            choice = displayMenu(sc);  // get user menu choice
+            switch(choice) {  // Choose an option based on user input
+                case WEIGHT:  // convert pounds to kilos
                     System.out.print("\tEnter weight in pounds : ");
-                    pounds = getUserDouble(sc);
-                    kilos = poundsToKilograms(pounds);
+                    pounds = getUserDouble(sc);  // get user input for pounds
+                    kilos = poundsToKilograms(pounds);  // convert
                     System.out.printf("\t%.2f lbs = %.2f kg\n", pounds, kilos);
                     sc.nextLine();  // clear input buffer
                     break;
-                case HEIGHT:
+                case HEIGHT:  // convert inches to centimeters
                     System.out.print("\tEnter height in inches : ");
-                    inches = getUserDouble(sc);
-                    centi = inchesToCentimeters(inches);
+                    inches = getUserDouble(sc);  // get user input for inches
+                    centi = inchesToCentimeters(inches);  // convert
                     System.out.printf("\t%.2f inches = %.2f cm\n", inches, centi);
                     sc.nextLine();  // clear input buffer
                     break;
-                case BMI:
+                case BMI:  // calculate BMI
                     System.out.print("\tEnter weight in kg and height in centimeters separated by space : ");
-                    kilos = getUserDouble(sc);
-                    centi = getUserDouble(sc);
-                    bmi = getBMI(kilos, centi);
+                    kilos = getUserDouble(sc);  // get user input for kiolos
+                    centi = getUserDouble(sc);  // get user input for centimeters
+                    bmi = getBMI(kilos, centi);  // convert
+                    // choose category based on BMI
                     if(bmi < 18.5)
                         System.out.printf("\tBMI=%.2f Category=Underweight\n", bmi);
                     else if(bmi < 25.0)
@@ -62,7 +66,7 @@ public class MillerRaymone_Asgn5 {
                         System.out.printf("\tBMI=%.2f Category=Obese\n", bmi);
                     sc.nextLine();  // clear input buffer
                     break;
-                case QUIT:
+                case QUIT:  // quit program
                     System.out.println("\nThank you for using the program. Goodbye!");
                     break;
             }
@@ -72,7 +76,7 @@ public class MillerRaymone_Asgn5 {
     public static String displayMenu(Scanner sc) {
         String choice;
         boolean badInput = true;
-        do {
+        do {  // run loop until user makes a valid choice
             System.out.println("\n\tMENU");
             System.out.println("1: Convert pounds into kilograms");
             System.out.println("2: Convert height in inches to centimeters");
@@ -84,10 +88,10 @@ public class MillerRaymone_Asgn5 {
                 case WEIGHT:
                 case HEIGHT:
                 case BMI:
-                case QUIT:
+                case QUIT:  // all 4 valid choises run this block of code
                     badInput = false;
                     break;
-                default:
+                default:  // default case if user makes invalid choice
                     System.out.println("Not a valid choice. Choose again.");
             }
         }while(badInput);
@@ -95,12 +99,12 @@ public class MillerRaymone_Asgn5 {
     }
 
     public static double getUserDouble(Scanner sc) {
-        double input = -1;
+        double input = -1;  // initialize input to prevent compile error
         boolean badInput = true;
         do {
             try {
                 input = sc.nextDouble();
-                if(input <= 0)
+                if(input <= 0)  // only accept positive numbers
                     System.out.print("\tPlease enter a positive number: ");
                 else
                     badInput = false;
@@ -110,18 +114,27 @@ public class MillerRaymone_Asgn5 {
                 sc.nextLine();  // clear scanner of bad input
             }
         }while(badInput);
+        /*
+        remember that since we are only reading a single double value from
+        the input buffer, all left over characters are still left in buffer.
+        This includes invisible characters.
+        Scanner.nextLine() needs to be called at some point to clear buffer.
+        */
         return input;
     }
 
     public static double poundsToKilograms(double pounds) {
+        // convert pounds to kilograms
         return pounds * WEIGHT_CONVERSION;
     }
 
     public static double inchesToCentimeters(double inches) {
+        // convert inches to centimeters
         return inches * HEIGHT_CONVERSION;
     }
 
     public static double getBMI(double kilos, double centi) {
+        // calculate BMI
         return kilos / centi / centi * BMI_CONVERSION;
     }
 }
