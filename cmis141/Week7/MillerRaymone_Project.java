@@ -9,9 +9,11 @@
 
 package com.miller.millerraymone_week7disc;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Scanner;
 import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Scanner;
 import java.util.function.Predicate;
 
 public class MillerRaymone_Week7Disc {
@@ -42,11 +44,11 @@ public class MillerRaymone_Week7Disc {
                     break;
                 case GET:
                     Employee empCopy = getEmployeeData(sc, employees, size);
-                    displayEmployeeData({empCopy});
+                    displayEmployeeData(new Employee[]{empCopy});
                     break;
                 case RANGE:
                     Employee[] empCopys = getEmployeeRange(sc, employees, size);
-                    displayEmployeeData(empCopy);
+                    displayEmployeeData(empCopys);
                     break;
                 case EXIT:
                     System.out.println("Thank you for using the HR system.");
@@ -63,13 +65,13 @@ public class MillerRaymone_Week7Disc {
             "3. Display All Employee Data\n" + 
             "4. Retrieve Specific Employee’s Data\n" + 
             "5. Retrieve Employees with Salaries Based on Range\n" + 
-            "6. Exit");
-        return getUserNumber(sc, "Enter your menu choice: ",
+            "6. Exit\n");
+        return (int) getUserNumber(sc, "Enter your menu choice: ",
             input -> input < LOAD || input > EXIT);
     }
 
     public static int loadEmployeeData(Scanner sc, Employee[] employees, int size) {
-        int toAdd = getUserNumber(sc, "How many employees do you want to load? ",
+        int toAdd = (int) getUserNumber(sc, "\tHow many employees do you want to load? ",
             input -> input <= 0);
         for(int i = 0; i < toAdd; i++)
             size = addEmployeeData(sc, employees, size);
@@ -77,13 +79,13 @@ public class MillerRaymone_Week7Disc {
     }
 
     public static int addEmployeeData(Scanner sc, Employee[] employees, int size) {
-        System.our.print("Enter the name of the employee: ");
+        System.out.print("\n\tEnter the name of the employee: ");
         String name = sc.nextLine();
 
-        int id = getUserNumber(sc, "Enter the employee id number: ",
+        int id = (int) getUserNumber(sc, "\tEnter the employee id number: ",
             input -> input < 10000 || input > 99999);
 
-        double salary = getUserNumber(sc, "Enter the employee's yearly salary: ",
+        double salary = getUserNumber(sc, "\tEnter the employee's yearly salary: ",
             input -> input <= 0);
 
         employees[size] = new Employee(name, id, salary);
@@ -98,30 +100,26 @@ public class MillerRaymone_Week7Disc {
     }
 
     public static Employee getEmployeeData(Scanner sc, Employee[] employees, int size) {
-        Employee empReturn;
-        int id = getUserNumber(sc, "Enter the employee id number: ",
+        int id = (int) getUserNumber(sc, "Enter the employee id number: ",
             input -> input < 10000 || input > 99999);
-        for(int i = 0; i < size; i++) {
-            empReturn = employees[i];
-            if(empReturn.getID() == id)
-                return empReturn;
-        } while(empReturn != null);
+        for(int i = 0; i < size; i++)
+            if(employees[i].getID() == id)
+                return employees[i];
         return null;
     }
 
     public static Employee[] getEmployeeRange(Scanner sc, Employee[] employees, int size) {
         List<Employee> empReturns = new ArrayList<>();
-        int minSal = getUserNumber(sc, "Enter the minimum employee salary: ",
-            input -> input <= 0);
-        int maxSal = getUserNumber(sc, "Enter the maximum employee salary: ",
+        int minSal = (int) getUserNumber(sc, "Enter the minimum employee salary: ",
+            input -> input < 0);
+        int maxSal = (int) getUserNumber(sc, "Enter the maximum employee salary: ",
             input -> input <= 0 || input < minSal);
 
         for(int i = 0; i < size; i++) {
-            Employee emp = employees[i];
-            if(emp.getSalary() >= minSal && emp.getSalary <= maxSal)
-                empReturns.add(emp);
+            if(employees[i].getSalary() >= minSal && employees[i].getSalary() <= maxSal)
+                empReturns.add(employees[i]);
         }
-        return empReturns;
+        return empReturns.toArray(new Employee[0]);
     }
 
     public static double getUserNumber(
@@ -145,7 +143,7 @@ public class MillerRaymone_Week7Disc {
         return input;
     }
 
-    class Employee {
+    static class Employee {
         private String name;
         private final int id;
         private double salary;
