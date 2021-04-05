@@ -127,6 +127,7 @@ public class MillerRaymone_Week7Disc {
     }
 
     public static void displayEmployeeData(Employee[] employees, int size) {
+        Arrays.parallelSort(employees, 0, size);
         System.out.println();
         for(int i = 0; i < size; i++)
             System.out.printf(
@@ -209,8 +210,8 @@ public class MillerRaymone_Week7Disc {
             return this.salary;
         }
 
-        int compareTo(Employee other) {
-            
+        public int compareTo(Employee other) {
+            return this.name.compareTo(other.name);
         }
     }
 }
