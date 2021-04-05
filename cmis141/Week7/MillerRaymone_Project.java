@@ -11,7 +11,6 @@ package com.miller.millerraymone_week7disc;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
@@ -40,20 +39,30 @@ public class MillerRaymone_Week7Disc {
                     size = addEmployeeData(sc, employees, size);
                     break;
                 case DISPLAY:
-                    displayEmployeeData(Arrays.copyOfRange(employees, 0, size));
+                    if(size == 0)
+                        System.out.println("\tNo employees added to list");
+                    else
+                        displayEmployeeData(employees, size);
                     break;
                 case GET:
                     Employee empCopy = getEmployeeData(sc, employees, size);
-                    displayEmployeeData(new Employee[]{empCopy});
+                    if(empCopy == null)
+                        System.out.println("\tEmployee could not be found");
+                    else
+                        displayEmployeeData(new Employee[]{empCopy}, 1);
                     break;
                 case RANGE:
                     Employee[] empCopys = getEmployeeRange(sc, employees, size);
-                    displayEmployeeData(empCopys);
+                    if(empCopys.length == 0)
+                        System.out.println("\tSalary not found");
+                    else
+                        displayEmployeeData(empCopys, empCopys.length);
                     break;
                 case EXIT:
                     System.out.println("Thank you for using the HR system.");
                     break;
             }
+            System.out.println();
         } while(choice != EXIT);
     }
 
@@ -71,19 +80,44 @@ public class MillerRaymone_Week7Disc {
     }
 
     public static int loadEmployeeData(Scanner sc, Employee[] employees, int size) {
-        int toAdd = (int) getUserNumber(sc, "\tHow many employees do you want to load? ",
-            input -> input <= 0);
-        for(int i = 0; i < toAdd; i++)
+        int toAdd = (int) getUserNumber(sc,
+            "\tHow many employees do you want to load? ", input -> input <= 0);
+        if(toAdd > employees.length - size) {
+            toAdd = employees.length - size;
+            System.out.printf(
+                "\tEmployee list limit will be reached. %d employees will be added\n",
+                toAdd);
+        }
+        for(int i = 0; i < toAdd; i++) {
+            System.out.printf("Employee %d of %d\n", i + 1, toAdd);
             size = addEmployeeData(sc, employees, size);
+        }
         return size;
     }
 
     public static int addEmployeeData(Scanner sc, Employee[] employees, int size) {
+        if(size >= employees.length) {
+            System.out.println(
+                "Employee list limit has been reached. Cannot add new employee.");
+            return size;
+        }
         System.out.print("\n\tEnter the name of the employee: ");
         String name = sc.nextLine();
 
-        int id = (int) getUserNumber(sc, "\tEnter the employee id number: ",
-            input -> input < 10000 || input > 99999);
+        int id;
+        boolean invalidID;
+        do {
+            invalidID = false;
+            id = (int) getUserNumber(sc, "\tEnter the employee id number: ",
+                input -> input < 10000 || input > 99999);
+            for(int i = 0; i < size; i++) {
+                if(id == employees[i].getID()) {
+                    System.out.println("\tThat ID is used. Enter a unique ID.");
+                    invalidID = true;
+                    break;
+                };
+            }
+        } while(invalidID);
 
         double salary = getUserNumber(sc, "\tEnter the employee's yearly salary: ",
             input -> input <= 0);
@@ -92,11 +126,13 @@ public class MillerRaymone_Week7Disc {
         return ++size;
     }
 
-    public static void displayEmployeeData(Employee[] employees) {
-        for(Employee emp: employees)
+    public static void displayEmployeeData(Employee[] employees, int size) {
+        System.out.println();
+        for(int i = 0; i < size; i++)
             System.out.printf(
-                "\tEmployee Name: %s; ID: %d; Yearly Salary: %.2f\n",
-                emp.getName(), emp.getID(), emp.getSalary());
+                "\tEmployee Name: %s; ID: %d; Yearly Salary: $%,.2f\n",
+                employees[i].getName(), employees[i].getID(),
+                employees[i].getSalary());
     }
 
     public static Employee getEmployeeData(Scanner sc, Employee[] employees, int size) {
@@ -134,20 +170,27 @@ public class MillerRaymone_Week7Disc {
                     System.out.println("\tNumber is invalid. try again");
                 else
                     badInput = false;
-            } catch(InputMismatchException e) {
+            } catch(NumberFormatException e) {
                 // user entered a non-number
                 System.out.println("\tThat is not a number. Try again");
-                sc.nextLine();  // clear scanner of bad input
             }
         } while(badInput);
         return input;
     }
 
-    static class Employee {
+    static class Employee implements Comparable<Employee> {
+        // name of employee
         private String name;
+        // ID of employee
+        /* as this is an identifying value, the implication is that
+           this value should be constant*/
         private final int id;
+        // yearly salary of the employee
         private double salary;
 
+        /**
+         * 
+         */
         Employee(String name, int id, double salary) {
             this.name = name;
             this.id = id;
@@ -164,6 +207,10 @@ public class MillerRaymone_Week7Disc {
 
         double getSalary() {
             return this.salary;
+        }
+
+        int compareTo(Employee other) {
+            
         }
     }
 }
