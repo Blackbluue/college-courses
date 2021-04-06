@@ -16,6 +16,7 @@ import java.util.Scanner;
 import java.util.function.Predicate;
 
 public class MillerRaymone_Week7Disc {
+    // constants for menu choices
     public static final int LOAD = 1;
     public static final int ADD = 2;
     public static final int DISPLAY = 3;
@@ -24,41 +25,46 @@ public class MillerRaymone_Week7Disc {
     public static final int EXIT = 6;
 
     public static void main(String[] args) {
+        // open scanner
         Scanner sc = new Scanner(System.in);
+        // array to hold employee data
         Employee[] employees = new Employee[100];
+        // the current amount of employee data in the array
         int size = 0;
+        // user input
         int choice;
 
+        // do-while loop to control program flow
         do {
             choice = displayMenu(sc);
             switch(choice) {
-                case LOAD:
+                case LOAD:  // add multiple employees
                     size = loadEmployeeData(sc, employees, size);
                     break;
-                case ADD:
+                case ADD:  // add one employees
                     size = addEmployeeData(sc, employees, size);
                     break;
-                case DISPLAY:
-                    if(size == 0)
+                case DISPLAY:  // display all current employee data
+                    if(size == 0)  // special message for empty employee list
                         System.out.println("\tNo employees added to list");
                     else
                         displayEmployeeData(employees, size);
                     break;
-                case GET:
+                case GET:  // get data for a specific employee
                     Employee empCopy = getEmployeeData(sc, employees, size);
-                    if(empCopy == null)
+                    if(empCopy == null)  // special message if employee not found
                         System.out.println("\tEmployee could not be found");
-                    else
+                    else  // method needs an array so make singleton
                         displayEmployeeData(new Employee[]{empCopy}, 1);
                     break;
-                case RANGE:
+                case RANGE:  // get data based on salary range
                     Employee[] empCopys = getEmployeeRange(sc, employees, size);
-                    if(empCopys.length == 0)
+                    if(empCopys.length == 0)  // special message when salary not found
                         System.out.println("\tSalary not found");
                     else
                         displayEmployeeData(empCopys, empCopys.length);
                     break;
-                case EXIT:
+                case EXIT:  // exit program
                     System.out.println("Thank you for using the HR system.");
                     break;
             }
@@ -66,8 +72,15 @@ public class MillerRaymone_Week7Disc {
         } while(choice != EXIT);
     }
 
+    /**
+     * Display menu and collect user iput.
+     *
+     * @param sc The scanner used in this program.
+     * @return An int representing the user's choice.
+     */
     public static int displayMenu(Scanner sc) {
         int choice;
+        // print menu options
         System.out.println(
             "1. Load Employees' data\n" + 
             "2. Add Employee Data\n" + 
@@ -75,49 +88,78 @@ public class MillerRaymone_Week7Disc {
             "4. Retrieve Specific Employee’s Data\n" + 
             "5. Retrieve Employees with Salaries Based on Range\n" + 
             "6. Exit\n");
+        // get use input, caste to int
         return (int) getUserNumber(sc, "Enter your menu choice: ",
             input -> input < LOAD || input > EXIT);
     }
 
+    /**
+     * Add multiple employees to the employee list.
+     *
+     * @param sc The scanner used in this program.
+     * @param employees The array of employees.
+     * @param size The current amount of employees in the array.
+     * @return The current amount of employees in the array after addition
+     */
     public static int loadEmployeeData(Scanner sc, Employee[] employees, int size) {
+        // the amount of employees to add
         int toAdd = (int) getUserNumber(sc,
             "\tHow many employees do you want to load? ", input -> input <= 0);
+        // check if the array has space to add the employees
         if(toAdd > employees.length - size) {
+            // only add enough that the array has space for
             toAdd = employees.length - size;
             System.out.printf(
                 "\tEmployee list limit will be reached. %d employees will be added\n",
                 toAdd);
         }
+        // loop to add employees 
         for(int i = 0; i < toAdd; i++) {
             System.out.printf("Employee %d of %d\n", i + 1, toAdd);
+            // update size after each addition
             size = addEmployeeData(sc, employees, size);
         }
         return size;
     }
 
+    /**
+     * Add a single employee to the employee list.
+     *
+     * @param sc The scanner used in this program.
+     * @param employees The array of employees.
+     * @param size The current amount of employees in the array.
+     * @return The current amount of employees in the array after addition
+     */
     public static int addEmployeeData(Scanner sc, Employee[] employees, int size) {
+        // chekc if the array has space for a new employee
         if(size >= employees.length) {
             System.out.println(
                 "Employee list limit has been reached. Cannot add new employee.");
+            // return the current size of the array without adding data
             return size;
         }
+        // get employee name
         System.out.print("\n\tEnter the name of the employee: ");
         String name = sc.nextLine();
 
+        // get employee id
         int id;
         boolean invalidID;
         do {
             invalidID = false;
+            // get user input, id must be 5 digits only
             id = (int) getUserNumber(sc, "\tEnter the employee id number: ",
                 input -> input < 10000 || input > 99999);
+            // loop to check uniqueness of id
             for(int i = 0; i < size; i++) {
                 if(id == employees[i].getID()) {
                     System.out.println("\tThat ID is used. Enter a unique ID.");
                     invalidID = true;
+                    // break out of for-loop and redo do-while loop
                     break;
                 };
             }
-        } while(invalidID);
+        } while(invalidID);  // if no duplicates, exit do-while loop
 
         double salary = getUserNumber(sc, "\tEnter the employee's yearly salary: ",
             input -> input <= 0);
@@ -183,9 +225,7 @@ public class MillerRaymone_Week7Disc {
         // name of employee
         private String name;
         // ID of employee
-        /* as this is an identifying value, the implication is that
-           this value should be constant*/
-        private final int id;
+        private int id;
         // yearly salary of the employee
         private double salary;
 
