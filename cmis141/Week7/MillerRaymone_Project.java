@@ -161,16 +161,27 @@ public class MillerRaymone_Week7Disc {
             }
         } while(invalidID);  // if no duplicates, exit do-while loop
 
+        // get employee salary. salary must be greater than 0
         double salary = getUserNumber(sc, "\tEnter the employee's yearly salary: ",
             input -> input <= 0);
 
+        // once all data is collected, make Employee object and put in array
         employees[size] = new Employee(name, id, salary);
+        // return the incremented size
         return ++size;
     }
 
+    /**
+     * Displays all the employee data currently in the array.
+     *
+     * @param employees The array of employees.
+     * @param size The current amount of employees in the array.
+     */
     public static void displayEmployeeData(Employee[] employees, int size) {
+        // sort array based on employee name
         Arrays.parallelSort(employees, 0, size);
         System.out.println();
+        // print each employee data, one employee per line
         for(int i = 0; i < size; i++)
             System.out.printf(
                 "\tEmployee Name: %s; ID: %d; Yearly Salary: $%,.2f\n",
@@ -178,29 +189,61 @@ public class MillerRaymone_Week7Disc {
                 employees[i].getSalary());
     }
 
+    /**
+     * Get the data for a specific employee, based on ID.
+     *
+     * @param sc The scanner used in this program.
+     * @param employees The array of employees.
+     * @param size The current amount of employees in the array.
+     * @return the requested employee, or null if not found.
+     */
     public static Employee getEmployeeData(Scanner sc, Employee[] employees, int size) {
-        int id = (int) getUserNumber(sc, "Enter the employee id number: ",
+        // get user input, for the specified id
+        int id = (int) getUserNumber(sc, "\tEnter the employee id number: ",
             input -> input < 10000 || input > 99999);
+        // loop over array until we find the specified id
         for(int i = 0; i < size; i++)
             if(employees[i].getID() == id)
-                return employees[i];
+                return employees[i];  // return Employee object when found
+        // if id not found, return null
         return null;
     }
 
+    /**
+     * Get the data for a range of employees, based on salary.
+     *
+     * @param sc The scanner used in this program.
+     * @param employees The array of employees.
+     * @param size The current amount of employees in the array.
+     * @return the requested list of employees, or empty array if not found.
+     */
     public static Employee[] getEmployeeRange(Scanner sc, Employee[] employees, int size) {
+        // container for found employees
         List<Employee> empReturns = new ArrayList<>();
-        int minSal = (int) getUserNumber(sc, "Enter the minimum employee salary: ",
+        // get input for min/max salary range
+        int minSal = (int) getUserNumber(sc, "\tEnter the minimum employee salary: ",
             input -> input < 0);
-        int maxSal = (int) getUserNumber(sc, "Enter the maximum employee salary: ",
+        int maxSal = (int) getUserNumber(sc, "\tEnter the maximum employee salary: ",
             input -> input <= 0 || input < minSal);
 
+        // loop over aray to find employees who fit in salary range
         for(int i = 0; i < size; i++) {
             if(employees[i].getSalary() >= minSal && employees[i].getSalary() <= maxSal)
                 empReturns.add(employees[i]);
         }
+        // convert List into array and return. array will be size 0 if none found
         return empReturns.toArray(new Employee[0]);
     }
 
+    /**
+     * Collect user numerical input. Accepts a prompt and a predicate to determine
+     * valid values for input.
+     *
+     * @param sc The scanner used in this program.
+     * @param prompt The prompt to print to the screen.
+     * @param invalid A Predicate used to determine invalid input.
+     * @return a number from user input.
+     */
     public static double getUserNumber(
         Scanner sc, String prompt, Predicate<Double> invalid) {
         double input = -1;  // initialize input to prevent compile error
@@ -221,6 +264,9 @@ public class MillerRaymone_Week7Disc {
         return input;
     }
 
+    /**
+     * Employee class to hold information on a single employee
+     */
     static class Employee implements Comparable<Employee> {
         // name of employee
         private String name;
@@ -230,7 +276,7 @@ public class MillerRaymone_Week7Disc {
         private double salary;
 
         /**
-         * 
+         * Employee constructor.
          */
         Employee(String name, int id, double salary) {
             this.name = name;
@@ -238,18 +284,32 @@ public class MillerRaymone_Week7Disc {
             this.salary = salary;
         }
 
+        /**
+         * Returns the name of the employee.
+         */
         String getName() {
             return this.name;
         }
 
+        /**
+         * Returns the ID of the employee.
+         */
         int getID() {
             return this.id;
         }
 
+        /**
+         * Returns the salary ofthe employee.
+         */
         double getSalary() {
             return this.salary;
         }
 
+        /**
+         * Compares this Employee to the other for ordering.
+         *
+         * @param other The other Employee to compare to.
+         */
         public int compareTo(Employee other) {
             return this.name.compareTo(other.name);
         }
