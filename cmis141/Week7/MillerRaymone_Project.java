@@ -23,26 +23,29 @@ public class MillerRaymone_Week7Disc {
     public static final int GET = 4;
     public static final int RANGE = 5;
     public static final int EXIT = 6;
+    // open scanner
+    public static final Scanner SC = new Scanner(System.in);
 
     public static void main(String[] args) {
-        // open scanner
-        Scanner sc = new Scanner(System.in);
         // array to hold employee data
-        Employee[] employees = new Employee[100];
+        EmployeeList employees = new EmployeeList(100);
+        //Employee[] employees = new Employee[100];
         // the current amount of employee data in the array
-        int size = 0;
+        //int size = 0;
         // user input
         int choice;
 
         // do-while loop to control program flow
         do {
-            choice = displayMenu(sc);
+            choice = displayMenu(SC);
             switch(choice) {
                 case LOAD:  // add multiple employees
-                    size = loadEmployeeData(sc, employees, size);
+                    int added = loadEmployeeData(employees);
+                    System.out.printf("%d employees have been added to the list",
+                        added);
                     break;
                 case ADD:  // add one employees
-                    size = addEmployeeData(sc, employees, size);
+                    size = addEmployeeData(SC, employees, size);
                     break;
                 case DISPLAY:  // display all current employee data
                     if(size == 0)  // special message for empty employee list
@@ -51,14 +54,14 @@ public class MillerRaymone_Week7Disc {
                         displayEmployeeData(employees, size);
                     break;
                 case GET:  // get data for a specific employee
-                    Employee empCopy = getEmployeeData(sc, employees, size);
+                    Employee empCopy = getEmployeeData(SC, employees, size);
                     if(empCopy == null)  // special message if employee not found
                         System.out.println("\tEmployee could not be found");
                     else  // method needs an array so make singleton
                         displayEmployeeData(new Employee[]{empCopy}, 1);
                     break;
                 case RANGE:  // get data based on salary range
-                    Employee[] empCopys = getEmployeeRange(sc, employees, size);
+                    Employee[] empCopys = getEmployeeRange(SC, employees, size);
                     if(empCopys.length == 0)  // special message when salary not found
                         System.out.println("\tSalary not found");
                     else
@@ -75,10 +78,9 @@ public class MillerRaymone_Week7Disc {
     /**
      * Display menu and collect user iput.
      *
-     * @param sc The scanner used in this program.
      * @return An int representing the user's choice.
      */
-    public static int displayMenu(Scanner sc) {
+    public static int displayMenu() {
         int choice;
         // print menu options
         System.out.println(
@@ -89,58 +91,48 @@ public class MillerRaymone_Week7Disc {
             "5. Retrieve Employees with Salaries Based on Range\n" + 
             "6. Exit\n");
         // get use input, caste to int
-        return (int) getUserNumber(sc, "Enter your menu choice: ",
+        return (int) getUserNumber(SC, "Enter your menu choice: ",
             input -> input < LOAD || input > EXIT);
     }
 
     /**
      * Add multiple employees to the employee list.
      *
-     * @param sc The scanner used in this program.
-     * @param employees The array of employees.
-     * @param size The current amount of employees in the array.
-     * @return The current amount of employees in the array after addition
+     * @param employees The list of employees.
+     * @return The amount of employees added to the list.
      */
-    public static int loadEmployeeData(Scanner sc, Employee[] employees, int size) {
+    public static int loadEmployeeData(EmployeeList employees, int size) {
         // the amount of employees to add
-        int toAdd = (int) getUserNumber(sc,
+        int toAdd = (int) getUserNumber(SC,
             "\tHow many employees do you want to load? ", input -> input <= 0);
-        // check if the array has space to add the employees
-        if(toAdd > employees.length - size) {
-            // only add enough that the array has space for
-            toAdd = employees.length - size;
-            System.out.printf(
-                "\tEmployee list limit will be reached. %d employees will be added\n",
-                toAdd);
-        }
+
         // loop to add employees 
         for(int i = 0; i < toAdd; i++) {
             System.out.printf("Employee %d of %d\n", i + 1, toAdd);
-            // update size after each addition
-            size = addEmployeeData(sc, employees, size);
+            // update toAdd if list limit has been reached
+            if(!addEmployeeData(employees))
+                toAdd = i;
         }
-        return size;
+        return toAdd;
     }
 
     /**
-     * Add a single employee to the employee list.
+     * Add a single employee to the employee list. Will reject the addition if
+     * the list is full.
      *
-     * @param sc The scanner used in this program.
-     * @param employees The array of employees.
-     * @param size The current amount of employees in the array.
-     * @return The current amount of employees in the array after addition
+     * @param employees The list of employees.
+     * @return true if the employee was added to the list.
      */
-    public static int addEmployeeData(Scanner sc, Employee[] employees, int size) {
+    public static boolean addEmployeeData(EmployeeList employees) {
         // chekc if the array has space for a new employee
-        if(size >= employees.length) {
+        if(employees.isFull()) {
             System.out.println(
                 "Employee list limit has been reached. Cannot add new employee.");
-            // return the current size of the array without adding data
-            return size;
+            return false;
         }
         // get employee name
         System.out.print("\n\tEnter the name of the employee: ");
-        String name = sc.nextLine();
+        String name = SC.nextLine();
 
         // get employee id
         int id;
@@ -148,27 +140,23 @@ public class MillerRaymone_Week7Disc {
         do {
             invalidID = false;
             // get user input, id must be 5 digits only
-            id = (int) getUserNumber(sc, "\tEnter the employee id number: ",
+            id = (int) getUserNumber(SC, "\tEnter the employee id number: ",
                 input -> input < 10000 || input > 99999);
-            // loop to check uniqueness of id
-            for(int i = 0; i < size; i++) {
-                if(id == employees[i].getID()) {
-                    System.out.println("\tThat ID is used. Enter a unique ID.");
-                    invalidID = true;
-                    // break out of for-loop and redo do-while loop
-                    break;
-                };
+            // check uniqueness of id
+            if(!employees.validID(id)) {
+                System.out.println("\tThat ID is used. Enter a unique ID.");
+                invalidID = true;
             }
         } while(invalidID);  // if no duplicates, exit do-while loop
 
         // get employee salary. salary must be greater than 0
-        double salary = getUserNumber(sc, "\tEnter the employee's yearly salary: ",
+        double salary = getUserNumber(SC, "\tEnter the employee's yearly salary: ",
             input -> input <= 0);
 
         // once all data is collected, make Employee object and put in array
-        employees[size] = new Employee(name, id, salary);
-        // return the incremented size
-        return ++size;
+        //employees[size] = new Employee(name, id, salary);
+        employees.add(new Employee(name, id, salary));
+        return true;
     }
 
     /**
@@ -192,14 +180,13 @@ public class MillerRaymone_Week7Disc {
     /**
      * Get the data for a specific employee, based on ID.
      *
-     * @param sc The scanner used in this program.
      * @param employees The array of employees.
      * @param size The current amount of employees in the array.
      * @return the requested employee, or null if not found.
      */
-    public static Employee getEmployeeData(Scanner sc, Employee[] employees, int size) {
+    public static Employee getEmployeeData(Employee[] employees, int size) {
         // get user input, for the specified id
-        int id = (int) getUserNumber(sc, "\tEnter the employee id number: ",
+        int id = (int) getUserNumber(SC, "\tEnter the employee id number: ",
             input -> input < 10000 || input > 99999);
         // loop over array until we find the specified id
         for(int i = 0; i < size; i++)
@@ -212,18 +199,17 @@ public class MillerRaymone_Week7Disc {
     /**
      * Get the data for a range of employees, based on salary.
      *
-     * @param sc The scanner used in this program.
      * @param employees The array of employees.
      * @param size The current amount of employees in the array.
      * @return the requested list of employees, or empty array if not found.
      */
-    public static Employee[] getEmployeeRange(Scanner sc, Employee[] employees, int size) {
+    public static Employee[] getEmployeeRange(Employee[] employees, int size) {
         // container for found employees
         List<Employee> empReturns = new ArrayList<>();
         // get input for min/max salary range
-        int minSal = (int) getUserNumber(sc, "\tEnter the minimum employee salary: ",
+        int minSal = (int) getUserNumber(SC, "\tEnter the minimum employee salary: ",
             input -> input < 0);
-        int maxSal = (int) getUserNumber(sc, "\tEnter the maximum employee salary: ",
+        int maxSal = (int) getUserNumber(SC, "\tEnter the maximum employee salary: ",
             input -> input <= 0 || input < minSal);
 
         // loop over aray to find employees who fit in salary range
@@ -239,19 +225,17 @@ public class MillerRaymone_Week7Disc {
      * Collect user numerical input. Accepts a prompt and a predicate to determine
      * valid values for input.
      *
-     * @param sc The scanner used in this program.
      * @param prompt The prompt to print to the screen.
      * @param invalid A Predicate used to determine invalid input.
      * @return a number from user input.
      */
-    public static double getUserNumber(
-        Scanner sc, String prompt, Predicate<Double> invalid) {
+    public static double getUserNumber(String prompt, Predicate<Double> invalid) {
         double input = -1;  // initialize input to prevent compile error
         boolean badInput = true;
         do {
             try {
                 System.out.print(prompt);
-                input = Double.valueOf(sc.nextLine());
+                input = Double.valueOf(SC.nextLine());
                 if(invalid.test(input))  // test input
                     System.out.println("\tNumber is invalid. try again");
                 else
@@ -267,7 +251,7 @@ public class MillerRaymone_Week7Disc {
     /**
      * Employee class to hold information on a single employee
      */
-    static class Employee implements Comparable<Employee> {
+    public static class Employee implements Comparable<Employee> {
         // name of employee
         private String name;
         // ID of employee
@@ -310,8 +294,116 @@ public class MillerRaymone_Week7Disc {
          *
          * @param other The other Employee to compare to.
          */
+         @override
         public int compareTo(Employee other) {
             return this.name.compareTo(other.name);
+        }
+    }
+
+    public static class EmployeeList extends AbstractList<Employee> {
+        private final Employee[] employees;
+        private int size;
+
+        /**
+         * Sole constructor. Creates an empty Employee list with the
+         * supplied initial capacity. The capacity of the list cannot be
+         * changed once the list is created.
+         *
+         * @param initialCapacity The initial capacity for the list.
+         */
+        public EmployeeList(int initialCapacity) {
+            this.employees = new Employee[initialCapacity];
+            this.size = 0;
+        }
+
+        /**
+         * Returns the number of elements in this list.
+         */
+        @override
+        public int size() {
+            return this.size;
+        }
+
+        /**
+         * Returns the element at the specified position in this list.
+         *
+         * @param index index of the element to return.
+         * @return the element at the specified position in this list.
+         */
+        @override
+        public Employee get(int index) {
+            return this.employees[index];
+        }
+
+        /**
+         * Replaces the element at the specified position in this
+         * list with the specified element.
+         *
+         * @param index index of the element to replace
+         * @return the element previously at the specified position.
+         */
+        @override
+        public Employee set(int index, Employee element) {
+            Employee previous = this.employees[index];
+            this.employees[index] = element;
+            return previous;
+        }
+
+        /**
+         * Inserts the specified element at the specified position in this list.
+         * Shifts the element currently at that position (if any) and any
+         * subsequent elements to the right (adds one to their indices).
+         *
+         * @param index index at which the specified element is to be inserted.
+         * @param element element to be inserted.
+         * @throws IllegalStateException If the list is alreayd full.
+         */
+        @override
+        public void add​(int index, Employee element) {
+            // check if list is full, throw exception if it is
+            if(this.size >= this.employees.length)
+                throw new IllegalStateException("Employee list limit has been reached. Cannot add new employee.");
+
+            // shift any elements after the requested index to the right
+            for(int i = this.size; i > index; i++)
+                this.employees[i] = this.employees[i - 1];
+            // insert element
+            this.employees[index] = element
+        }
+
+        /**
+         * Return the Employee with the specified ID number.
+         *
+         * @param id ID of the employee.
+         * @return the employee with the specified ID.
+         */
+        public Employee getFromID(int id) {
+            for(int i = 0; i < this.size; i++)
+                if(this.employees[i].getID() == id)
+                    return this.employees[i];  // return Employee object when found
+            // if id not found, return null
+            return null;
+        }
+
+        /**
+         * Returns true if this list is full, based on the initial capacity.
+         *
+         * @return true if this list is full.
+         */
+        public boolean isFull() {
+            return this.size == this.employees.length;
+        }
+
+        /**
+         * Returns true if the specified ID has not been used.
+         *
+         * @return true if the specified ID has not been used.
+         */
+        public boolean validID(int id) {
+            for(int i = 0; i < this.size; i++)
+                if(id == this.employees[i].getID())
+                    return false;
+            return true;
         }
     }
 }
