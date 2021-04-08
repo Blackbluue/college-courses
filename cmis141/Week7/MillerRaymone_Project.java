@@ -9,10 +9,7 @@
 
 package com.miller.millerraymone_week7disc;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.function.Predicate;
 
 public class MillerRaymone_Week7Disc {
@@ -27,11 +24,9 @@ public class MillerRaymone_Week7Disc {
     public static final Scanner SC = new Scanner(System.in);
 
     public static void main(String[] args) {
-        // array to hold employee data
+        // list to hold employee data
         EmployeeList employees = new EmployeeList(100);
         //Employee[] employees = new Employee[100];
-        // the current amount of employee data in the array
-        //int size = 0;
         // user input
         int choice;
 
@@ -44,28 +39,34 @@ public class MillerRaymone_Week7Disc {
                     System.out.printf("%d employees have been added to the list",
                         added);
                     break;
-                case ADD:  // add one employees
-                    size = addEmployeeData(SC, employees, size);
+                case ADD:  // add one employee
+                    if(addEmployeeData(employees))
+                        System.out.println("\tEmployee successfully added");
+                    else
+                        System.out.println("\tList full, employee not added.");
                     break;
                 case DISPLAY:  // display all current employee data
-                    if(size == 0)  // special message for empty employee list
+                    if(employees.isEmpty()) {  // special message for empty employee list
                         System.out.println("\tNo employees added to list");
-                    else
-                        displayEmployeeData(employees, size);
+                    } else {
+                        System.out.printf("\n\tDisplaying %d employees' data\n",
+                            employees.size());
+                        displayEmployeeData(employees.toArray(new Employee[0]));
+                    }
                     break;
                 case GET:  // get data for a specific employee
-                    Employee empCopy = getEmployeeData(SC, employees, size);
+                    Employee empCopy = getEmployeeData(employees);
                     if(empCopy == null)  // special message if employee not found
                         System.out.println("\tEmployee could not be found");
                     else  // method needs an array so make singleton
-                        displayEmployeeData(new Employee[]{empCopy}, 1);
+                        displayEmployeeData(empCopy);
                     break;
                 case RANGE:  // get data based on salary range
-                    Employee[] empCopys = getEmployeeRange(SC, employees, size);
+                    Employee[] empCopys = getEmployeeRange(employees);
                     if(empCopys.length == 0)  // special message when salary not found
                         System.out.println("\tSalary not found");
                     else
-                        displayEmployeeData(empCopys, empCopys.length);
+                        displayEmployeeData(empCopys);
                     break;
                 case EXIT:  // exit program
                     System.out.println("Thank you for using the HR system.");
@@ -96,7 +97,8 @@ public class MillerRaymone_Week7Disc {
     }
 
     /**
-     * Add multiple employees to the employee list.
+     * Add multiple employees to the employee list. Will reject addition
+     * if the list is full.
      *
      * @param employees The list of employees.
      * @return The amount of employees added to the list.
@@ -124,10 +126,10 @@ public class MillerRaymone_Week7Disc {
      * @return true if the employee was added to the list.
      */
     public static boolean addEmployeeData(EmployeeList employees) {
-        // chekc if the array has space for a new employee
+        // check if the list has space for a new employee
         if(employees.isFull()) {
             System.out.println(
-                "Employee list limit has been reached. Cannot add new employee.");
+                "\tEmployee list limit has been reached. Cannot add new employee.");
             return false;
         }
         // get employee name
@@ -153,8 +155,7 @@ public class MillerRaymone_Week7Disc {
         double salary = getUserNumber(SC, "\tEnter the employee's yearly salary: ",
             input -> input <= 0);
 
-        // once all data is collected, make Employee object and put in array
-        //employees[size] = new Employee(name, id, salary);
+        // once all data is collected, make Employee object and put in list
         employees.add(new Employee(name, id, salary));
         return true;
     }
@@ -162,48 +163,40 @@ public class MillerRaymone_Week7Disc {
     /**
      * Displays all the employee data currently in the array.
      *
-     * @param employees The array of employees.
-     * @param size The current amount of employees in the array.
+     * @param employees The list of employees.
      */
-    public static void displayEmployeeData(Employee[] employees, int size) {
+    public static void displayEmployeeData(Employee... employees) {
         // sort array based on employee name
-        Arrays.parallelSort(employees, 0, size);
-        System.out.println();
+        Arrays.parallelSort(employees);
+
         // print each employee data, one employee per line
-        for(int i = 0; i < size; i++)
+        for(Employee emp: employees)
             System.out.printf(
                 "\tEmployee Name: %s; ID: %d; Yearly Salary: $%,.2f\n",
-                employees[i].getName(), employees[i].getID(),
-                employees[i].getSalary());
+                emp.getName(), emp.getID(), emp.getSalary());
     }
 
     /**
      * Get the data for a specific employee, based on ID.
      *
-     * @param employees The array of employees.
-     * @param size The current amount of employees in the array.
+     * @param employees The list of employees.
      * @return the requested employee, or null if not found.
      */
-    public static Employee getEmployeeData(Employee[] employees, int size) {
+    public static Employee getEmployeeData(EmployeeList employees) {
         // get user input, for the specified id
         int id = (int) getUserNumber(SC, "\tEnter the employee id number: ",
             input -> input < 10000 || input > 99999);
         // loop over array until we find the specified id
-        for(int i = 0; i < size; i++)
-            if(employees[i].getID() == id)
-                return employees[i];  // return Employee object when found
-        // if id not found, return null
-        return null;
+        return employees.getFromID(id);
     }
 
     /**
      * Get the data for a range of employees, based on salary.
      *
-     * @param employees The array of employees.
-     * @param size The current amount of employees in the array.
-     * @return the requested list of employees, or empty array if not found.
+     * @param employees The list of employees.
+     * @return the requested range of employees, or empty array if not found.
      */
-    public static Employee[] getEmployeeRange(Employee[] employees, int size) {
+    public static Employee[] getEmployeeRange(EmployeeList employees) {
         // container for found employees
         List<Employee> empReturns = new ArrayList<>();
         // get input for min/max salary range
@@ -213,9 +206,9 @@ public class MillerRaymone_Week7Disc {
             input -> input <= 0 || input < minSal);
 
         // loop over aray to find employees who fit in salary range
-        for(int i = 0; i < size; i++) {
-            if(employees[i].getSalary() >= minSal && employees[i].getSalary() <= maxSal)
-                empReturns.add(employees[i]);
+        for(Employee emp: employees) {
+            if(emp.getSalary() >= minSal && emp.getSalary() <= maxSal)
+                empReturns.add(emp);
         }
         // convert List into array and return. array will be size 0 if none found
         return empReturns.toArray(new Employee[0]);
@@ -270,6 +263,8 @@ public class MillerRaymone_Week7Disc {
 
         /**
          * Returns the name of the employee.
+         *
+         * @return The name of the employee
          */
         String getName() {
             return this.name;
@@ -277,6 +272,8 @@ public class MillerRaymone_Week7Disc {
 
         /**
          * Returns the ID of the employee.
+         *
+         * @return The Id of the employee
          */
         int getID() {
             return this.id;
@@ -284,6 +281,8 @@ public class MillerRaymone_Week7Disc {
 
         /**
          * Returns the salary ofthe employee.
+         *
+         * @return The yearly salary of the employee
          */
         double getSalary() {
             return this.salary;
@@ -318,6 +317,8 @@ public class MillerRaymone_Week7Disc {
 
         /**
          * Returns the number of elements in this list.
+         *
+         * @return The number of elements in this list
          */
         @override
         public int size() {
@@ -361,7 +362,7 @@ public class MillerRaymone_Week7Disc {
         @override
         public void add​(int index, Employee element) {
             // check if list is full, throw exception if it is
-            if(this.size >= this.employees.length)
+            if(this.isFull())
                 throw new IllegalStateException("Employee list limit has been reached. Cannot add new employee.");
 
             // shift any elements after the requested index to the right
