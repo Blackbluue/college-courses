@@ -26,22 +26,21 @@ public class MillerRaymone_Week7Disc {
     public static void main(String[] args) {
         // list to hold employee data
         EmployeeList employees = new EmployeeList(100);
-        //Employee[] employees = new Employee[100];
         // user input
         int choice;
 
+        System.out.println("Welcome to the HR Employee management system\n");
         // do-while loop to control program flow
         do {
-            choice = displayMenu(SC);
+            choice = displayMenu();
             switch(choice) {
                 case LOAD:  // add multiple employees
                     int added = loadEmployeeData(employees);
-                    System.out.printf("%d employees have been added to the list",
-                        added);
+                    System.out.printf("%d employee(s) added to the list\n", added);
                     break;
                 case ADD:  // add one employee
                     if(addEmployeeData(employees))
-                        System.out.println("\tEmployee successfully added");
+                        System.out.println("\n\tEmployee successfully added");
                     else
                         System.out.println("\tList full, employee not added.");
                     break;
@@ -49,7 +48,7 @@ public class MillerRaymone_Week7Disc {
                     if(employees.isEmpty()) {  // special message for empty employee list
                         System.out.println("\tNo employees added to list");
                     } else {
-                        System.out.printf("\n\tDisplaying %d employees' data\n",
+                        System.out.printf("\n\tDisplaying %d employee(s) data\n",
                             employees.size());
                         displayEmployeeData(employees.toArray(new Employee[0]));
                     }
@@ -69,7 +68,7 @@ public class MillerRaymone_Week7Disc {
                         displayEmployeeData(empCopys);
                     break;
                 case EXIT:  // exit program
-                    System.out.println("Thank you for using the HR system.");
+                    System.out.println("\nThank you for using the HR system.");
                     break;
             }
             System.out.println();
@@ -92,7 +91,7 @@ public class MillerRaymone_Week7Disc {
             "5. Retrieve Employees with Salaries Based on Range\n" + 
             "6. Exit\n");
         // get use input, caste to int
-        return (int) getUserNumber(SC, "Enter your menu choice: ",
+        return (int) getUserNumber("Enter your menu choice: ",
             input -> input < LOAD || input > EXIT);
     }
 
@@ -103,10 +102,10 @@ public class MillerRaymone_Week7Disc {
      * @param employees The list of employees.
      * @return The amount of employees added to the list.
      */
-    public static int loadEmployeeData(EmployeeList employees, int size) {
+    public static int loadEmployeeData(EmployeeList employees) {
         // the amount of employees to add
-        int toAdd = (int) getUserNumber(SC,
-            "\tHow many employees do you want to load? ", input -> input <= 0);
+        int toAdd = (int) getUserNumber("\tHow many employees do you want to load? ",
+            input -> input <= 0);
 
         // loop to add employees 
         for(int i = 0; i < toAdd; i++) {
@@ -142,7 +141,7 @@ public class MillerRaymone_Week7Disc {
         do {
             invalidID = false;
             // get user input, id must be 5 digits only
-            id = (int) getUserNumber(SC, "\tEnter the employee id number: ",
+            id = (int) getUserNumber("\tEnter the employee id number: ",
                 input -> input < 10000 || input > 99999);
             // check uniqueness of id
             if(!employees.validID(id)) {
@@ -152,7 +151,7 @@ public class MillerRaymone_Week7Disc {
         } while(invalidID);  // if no duplicates, exit do-while loop
 
         // get employee salary. salary must be greater than 0
-        double salary = getUserNumber(SC, "\tEnter the employee's yearly salary: ",
+        double salary = getUserNumber("\tEnter the employee's yearly salary: ",
             input -> input <= 0);
 
         // once all data is collected, make Employee object and put in list
@@ -184,7 +183,7 @@ public class MillerRaymone_Week7Disc {
      */
     public static Employee getEmployeeData(EmployeeList employees) {
         // get user input, for the specified id
-        int id = (int) getUserNumber(SC, "\tEnter the employee id number: ",
+        int id = (int) getUserNumber("\tEnter the employee id number: ",
             input -> input < 10000 || input > 99999);
         // loop over array until we find the specified id
         return employees.getFromID(id);
@@ -200,9 +199,9 @@ public class MillerRaymone_Week7Disc {
         // container for found employees
         List<Employee> empReturns = new ArrayList<>();
         // get input for min/max salary range
-        int minSal = (int) getUserNumber(SC, "\tEnter the minimum employee salary: ",
+        int minSal = (int) getUserNumber("\tEnter the minimum employee salary: ",
             input -> input < 0);
-        int maxSal = (int) getUserNumber(SC, "\tEnter the maximum employee salary: ",
+        int maxSal = (int) getUserNumber("\tEnter the maximum employee salary: ",
             input -> input <= 0 || input < minSal);
 
         // loop over aray to find employees who fit in salary range
@@ -293,7 +292,7 @@ public class MillerRaymone_Week7Disc {
          *
          * @param other The other Employee to compare to.
          */
-         @override
+         @Override
         public int compareTo(Employee other) {
             return this.name.compareTo(other.name);
         }
@@ -320,7 +319,7 @@ public class MillerRaymone_Week7Disc {
          *
          * @return The number of elements in this list
          */
-        @override
+        @Override
         public int size() {
             return this.size;
         }
@@ -331,7 +330,7 @@ public class MillerRaymone_Week7Disc {
          * @param index index of the element to return.
          * @return the element at the specified position in this list.
          */
-        @override
+        @Override
         public Employee get(int index) {
             return this.employees[index];
         }
@@ -343,7 +342,7 @@ public class MillerRaymone_Week7Disc {
          * @param index index of the element to replace
          * @return the element previously at the specified position.
          */
-        @override
+        @Override
         public Employee set(int index, Employee element) {
             Employee previous = this.employees[index];
             this.employees[index] = element;
@@ -359,7 +358,7 @@ public class MillerRaymone_Week7Disc {
          * @param element element to be inserted.
          * @throws IllegalStateException If the list is alreayd full.
          */
-        @override
+        @Override
         public void add​(int index, Employee element) {
             // check if list is full, throw exception if it is
             if(this.isFull())
@@ -369,7 +368,8 @@ public class MillerRaymone_Week7Disc {
             for(int i = this.size; i > index; i++)
                 this.employees[i] = this.employees[i - 1];
             // insert element
-            this.employees[index] = element
+            this.employees[index] = element;
+            this.size++;
         }
 
         /**
