@@ -1,96 +1,65 @@
-/*
- * File: HernandezJuan_DiscWeek7.java
- * Author: Juan Hernandez
- * Class: CMIS 141/2212 - Discussion Week 7
- * Date: 04/04/2021
- * Description: A program that generates a random group of 10 positive integers between a range indicated by the user. The program does a couple of calculation
- * and organizes the numbers in a decreasing pattern.
- */
+/**
+   File:  Discussion7.java   
+   Author:  Ji Ye (Eunice) Kim
+   Class:  CMIS 141 6980
+   Creation Date:  04/12/2021
+   Description:  This program contains a class and method
+*/
+public class Discussion8 {
 
-import java.util.Arrays;
-import java.util.Scanner;
-
-public class HernandezJuan_DiscWeek7 {
+	public static class Thermometer{ // static class so  a static class can access only the static members of the outer class.
 		
-	// Define method that takes value and simply multiplies it by 7
-	public static int multBy7(int n) {
-		n = n*7;
-		return n;
-	}
+		//attribute
+		public String season;
+		public double high, low;
 	
-	public static void main(String[] args) {
-		// Declare variable and open program for input
-		Scanner userInput = new Scanner(System.in);
-		int lowLim;									// Will store lower limit of the range
-		int uppLim;									// Will store upper limit of the range
-		int num[] = new int[10];					// Randomly generated list of positive integers between the limits indicated by user
-		boolean notValidOrd = true;					// To validate order and the low and upper limits
-		boolean notValidSize = true;				// To validate size of range
-		int randInt = 0;							// Will store the random integer that then is sent to the array to be stored
+		// constructor to assign value to attribute
+		public  Thermometer(String season, double high, double low) {
+			this.season = season;
+			this.high = high;
+			this.low = low; 
+		}	
 		
-		System.out.println("Create a random list of 10 whose range your define"
-				+ "numbers and have a couple of things done to them.");
+		// class methods (actions or behaviors)
 		
-		// Ask user to define the limits
-		System.out.print("Enter the lower and upper limits separated by a space and press enter: ");
-		lowLim = userInput.nextInt();
-		uppLim = userInput.nextInt();
-		userInput.nextLine();
-		
-		// Ensure limit values are ok. Lower limit needs to be less than upper limit
-		// Difference needs to be at least 10 in order to generate a list of 10 numbers
-		if(lowLim >= uppLim || uppLim - lowLim < 10) {
-			while (lowLim >= uppLim || uppLim - lowLim < 10) {
-				if(lowLim >= uppLim) {
-					System.out.println("The upper limit needs to be greater then the lower limit.");
-					notValidOrd = true;
-				}
-				if(Math.abs(uppLim - lowLim) < 10) {
-					System.out.println("The range needs to be greater");
-					notValidSize = true;
-				}
-				System.out.println("\nTry again: ");
-				System.out.print("\nEnter the value limits, lower and upper; separated by space: ");
-				lowLim = userInput.nextInt();
-				uppLim = userInput.nextInt();
-				
-				if (lowLim <= uppLim && uppLim - lowLim >= 10) {
-					break;
-				}
-			}		
+		public double getHighTempCelsius() { // compute High Temp in Celsius
+			double cel = (high-32)*1.8;
+			return cel; 	
 		}
-		// Generate random list of integers within limits
-		for (int i = 0; i<num.length && randInt < uppLim; i++) {
-			randInt = (int)(Math.random()*(uppLim - lowLim)+lowLim);
-			num[i] = randInt;
+	
+		public double getLowTempCelsius() { // compute Low Temp in Celsius
+		    return ((low - 32)*1.8); 	
 		}
-		System.out.print("\nThis is the initial list of random positive integers: \n");
-		for (int h = 0; h<num.length; h++) {
-			System.out.printf("%d ", num[h]);
-		}
+	
 		
-		// Sort the numbers that are multiples of 2 and prints them out
-		System.out.println("\n\nOf the initial group, these numbers that are multiples of 2: ");
-		for (int i = 0 ; i<num.length; i++) {
-			if(num[i]%2 == 0) {
-				System.out.printf("%d ", num[i]);
-			}
-		}
+		public double[] getTempCelsius(int h, int l) { // compute 2 Temps in Celsius
+		    return new double[]{(h - 32)*1.8, (l - 32)*1.8}; 	
+	    }
+	
+	}	
+	
 		
-		// Call for the method to multiply each value of the original list by 7 and print it out
-		System.out.println("\n\nEach one of the initial numbers multiplied by 7 is as follows: ");
+	public static void main (String[] args) {
 		
-		for (int j = 0; j < num.length; j++) {
-			System.out.printf("%d ", multBy7(num[j]));
-		}
+		Thermometer season1 = new Thermometer ("Spring",58,55);
+		Thermometer season2 = new Thermometer ("Summer",65,48);
+		Thermometer season3 = new Thermometer ("Autumn",67,60);
+		Thermometer season4 = new Thermometer ("Winter",68,63);
 		
-		// Sort the initial group of numbers and print them out
-		Arrays.sort(num);
-		System.out.println("\n\nThis is the list initial numbers now sorted in ascending order: ");
-		for (int i = 0 ; i<num.length; i++) {
-			System.out.printf("%d ", num[i]);
-		}
-		userInput.close();
-	}
+		System.out.println("For " + season1.season + ", your Thermometer is set at: "+ season1.high + " at highest, "+ season1.low + " at lowest");
+		System.out.println("In Celsius, " + "season1.getHighTempCelsius()"+" at highest, " + "season1.getLowTempCelsius()" +" at lowest\n");
+		
+		System.out.println("For " + season2.season + ", your Thermometer is set at: "+ season2.high + " at highest, "+ season2.low + " at lowest\n");
+		System.out.println("In Celsius, " + season1.getHighTempCelsius()+" at highest, " + season1.getLowTempCelsius() +" at lowest\n");	
+		
+		System.out.println("For " + season3.season + ", your Thermometer is set at: "+ season3.high + " at highest, "+ season3.low + " at lowest\n");
+		System.out.println("In Celsius, " + season3.getHighTempCelsius()+" at highest, " + season3.getLowTempCelsius() +" at lowest\n");		
+		
+		System.out.println("For " + season4.season + ", your Thermometer is set at: "+ season4.high + " at highest, "+ season4.low + " at lowest\n");
+		System.out.println("In Celsius, " + season4.getHighTempCelsius()+" at highest, " + season4.getLowTempCelsius() +" at lowest\n");		
+		
+		
+	}		
+}
 
-} // End of program
+
