@@ -6,8 +6,13 @@
  * Description: Create a Book Inventory interface
  */
 
- public class MillerRaymone_Week1Disc {
+package college_courses.cmis242.week1;
+
+import college_courses.cmis242.week1.Book;
+
+public class MillerRaymone_Week1Disc {
     public static void main(String[] args) {
-        
+        Book book = new Book(0, "Lord of the Flies", 12.50);
+        book.display();
     }
  }

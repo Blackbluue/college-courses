@@ -6,6 +6,8 @@
  * Description: Create a Book Inventory interface
  */
 
+package college_courses.cmis242.week1;
+
 public class Book {
     private final int id;
     private final String title;
@@ -50,6 +52,15 @@ public class Book {
      */
     public double getPrice() {
         return this.price;
+    }
+
+    /**
+     * Display the details of this book to the console.
+     */
+    public void display() {
+        System.out.printf("Book ID =\t%d\n", this.id);
+        System.out.printf("Book Title =\t%s\n", this.title);
+        System.out.printf("Book Price =\t%.2f\n", this.price);
     }
 
     /**
