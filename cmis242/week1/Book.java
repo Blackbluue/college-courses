@@ -6,7 +6,7 @@
  * Description: Create a Book Inventory interface
  */
 
-package college_courses.cmis242.week1;
+//package college_courses.cmis242.week1;
 
 public class Book {
     private final int id;
