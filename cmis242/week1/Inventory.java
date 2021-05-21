@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class Inventory {
-    private final Map<Book> bookShelf;
+    private final Map<Integer, Book> bookShelf;
 
     /**
      * Construct a new Inventory object.
@@ -41,32 +41,23 @@ public class Inventory {
     }
 
     /**
-     * Remove the book with the specified ID from the inventory. If the book
-     * was not in the inventory, an error message will be displayed.
+     * Remove the book with the specified ID from the inventory.
      *
      * @param id The id of the book to remove.
-     * @return True if the book was in the inventory, and was sucessfully removed.
+     * @return The specified book, or null if not found.
      */
-    public boolean remove(int id) {
-        if(this.bookShelf.remove(id) == null) {
-            System.out.println("Book was not in the inventory");
-            return false;
-        }
-        return true;
+    public Book remove(int id) {
+        return this.bookShelf.remove(id);
     }
 
     /**
      * Finds the book with the specified ID in the inventory and returns it.
-     * If the book was not in the inventory, an error message will be displayed.
      *
-     * @param The ID of the specified book.
+     * @param id The ID of the specified book.
      * @return The specified book, or null if not found.
      */
     public Book find(int id) {
-        Book book = this.bookShelf.get(id);
-        if(book == null)
-            System.out.println("Book was not in the inventory");
-        return book;
+        return this.bookShelf.get(id);
     }
 
     /**

@@ -18,26 +18,28 @@ public class MillerRaymone_Asgn1 {
     public static final int DISPLAY = 4;
 
     public static void main(String[] args) {
+        // inventory for all books
         Inventory inventory = new Inventory();
-        int choice;
+        int choice;  // user choice for menu option
 
+        // do..while loop to control program flow
         do {
             choice = displayMenu();
             switch(choice) {
                 case ADD:
-                    //add new book
+                    addBook(inventory);
                     break;
                 case REMOVE:
-                    //remove book
+                    removeBook(inventory);
                     break;
                 case FIND:
-                    //find book
+                    findBook(inventory);
                     break;
                 case DISPLAY:
-                    //display all books
+                    displayBooks(inventory);
                     break;
                 case EXIT:
-                    //exit program
+                    System.out.println("Thank you for using the book invnetory system.");
                     break;
                 default:
                     System.out.println("Choice not recognized");
@@ -47,26 +49,73 @@ public class MillerRaymone_Asgn1 {
     }
 
     public static int displayMenu() {
-        Scanner scan = new Scanner(System.in);
-        boolean badInput = true;
-        int choice;
+        System.out.println("Please select one of the following options");
+        System.out.println("(1) Add");
+        System.out.println("(2) Remove");
+        System.out.println("(3) Find");
+        System.out.println("(4) Display");
+        System.out.println("(0) Exit");
 
-        do {
-            System.out.println("Please select one of the following options");
-            System.out.println("(1) Add");
-            System.out.println("(2) Remove");
-            System.out.println("(3) Find");
-            System.out.println("(4) Display");
-            System.out.println("(0) Exit");
-
-            choice = (int) getUserNumber("Please select one of options above: ", input -> input < EXIT || input > DISPLAY);
-            
-        } while(badInput);
-        return choice;
+        return (int) getUserNumber("Please select one of options above: ", input -> input < EXIT || input > DISPLAY);
     }
 
     public static void addBook(Inventory inventory) {
+        Scanner scan = new Scanner(System.in);
 
+        int id = (int) getUserNumber("What is the ID of the book: ", input -> true);
+        System.out.print("What is the title of the book: ");
+        String title = scan.nextLine();
+        double price = getUserNumber("What is the price of the book: ", input -> true);
+
+        Book book = new Book(id, title, price);
+        inventory.add(book);
+    }
+
+    /**
+     * Removes the book with a specified ID from the inventory.
+     * If the book was not in the inventory, an error message
+     * will be displayed.
+     *
+     * @param inventory The inventory of books.
+     */
+    public static void removeBook(Inventory inventory) {
+        // get user input
+        int id = (int) getUserNumber("What is the ID of the book: ", input -> true);
+        // remove book if found
+        Book book = inventory.remove(id);
+        // display outcome to console
+        if(book)
+            Systme.out.printf("%s was removed from the inventory", book.getTitle());
+        else
+            System.out.println("Book was not in the inventory");
+    }
+
+    /**
+     * Finds the book with a specified ID in the inventory and displays
+     * it to the console. If the book was not in the inventory,
+     * an error message will be displayed.
+     *
+     * @param inventory The inventory of books.
+     */
+    public static void findBook(Inventory inventory) {
+        // get user input
+        int id = (int) getUserNumber("What is the ID of the book: ", input -> true);
+        // look for the book in the invnetory
+        Book book = inventory.find(id);
+        // display the book if found, print error message if not
+        if(book)
+            book.display();
+        else
+            System.out.println("Book was not found");
+    }
+
+    /**
+     * Display every book in the inventory to the console.
+     *
+     * @param inventory The inventory of books.
+     */
+    public static void displayBooks(Inventory inventory) {
+        inventory.display();  // display every book in inventory
     }
 
     public static double getUserNumber(

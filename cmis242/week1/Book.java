@@ -58,33 +58,8 @@ public class Book {
      * Display the details of this book to the console.
      */
     public void display() {
-        System.out.printf("Book ID =\t%d\n", this.id);
-        System.out.printf("Book Title =\t%s\n", this.title);
+        System.out.printf("Book ID =\t%d; ", this.id);
+        System.out.printf("Book Title =\t%s; ", this.title);
         System.out.printf("Book Price =\t%.2f\n", this.price);
-    }
-
-    /**
-     * Check if the other instance is equal to this one.
-     *
-     * @return True if other is equal to this instance, otherwise False.
-     */
-    public final boolean equals(Object other) {
-        // self check
-        if(this == other)
-            return true;
-        // type check and cast, and null check
-        if(!(other instanceof Book) || other == null)
-            return false;
-        Book book = (Book) other;
-        return Objects.equals(this.id, book.id);
-    }
-
-    /**
-     * Return the hash code of this object.
-     *
-     * @return The hash code of this object.
-     */
-    public final int HashCode() {
-        return Objects.hash(this.id);
     }
 }
