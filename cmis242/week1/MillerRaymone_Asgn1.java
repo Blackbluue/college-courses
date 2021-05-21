@@ -7,6 +7,7 @@
  */
 
 import java.util.Scanner;
+import java.util.InputMismatchException;
 import java.util.function.Predicate;
 
 public class MillerRaymone_Asgn1 {
@@ -18,23 +19,10 @@ public class MillerRaymone_Asgn1 {
 
     public static void main(String[] args) {
         Inventory inventory = new Inventory();
-        Book book = new Book(0, "Lord of the Flies", 12.50);
-        book.display();
-    }
-
-    public static int displayMenu() {
-        Scanner scan = new Scanner(Systen.in);
-        boolean badInput = true;
+        int choice;
 
         do {
-            System.out.println("Please select one of the following options");
-            System.out.println("(1) Add");
-            System.out.println("(2) Remove");
-            System.out.println("(3) Find");
-            System.out.println("(4) Display");
-            System.out.println("(0) Exit");
-
-            int choice = (int) getUserNumber("Please select one of options above: ", input -> input < EXIT || input > DISPLAY);
+            choice = displayMenu();
             switch(choice) {
                 case ADD:
                     //add new book
@@ -53,10 +41,28 @@ public class MillerRaymone_Asgn1 {
                     break;
                 default:
                     System.out.println("Choice not recognized");
-                    badInput = true;
                     break;
             }
-        }while(badInput);
+        } while(choice != EXIT);
+    }
+
+    public static int displayMenu() {
+        Scanner scan = new Scanner(System.in);
+        boolean badInput = true;
+        int choice;
+
+        do {
+            System.out.println("Please select one of the following options");
+            System.out.println("(1) Add");
+            System.out.println("(2) Remove");
+            System.out.println("(3) Find");
+            System.out.println("(4) Display");
+            System.out.println("(0) Exit");
+
+            choice = (int) getUserNumber("Please select one of options above: ", input -> input < EXIT || input > DISPLAY);
+            
+        } while(badInput);
+        return choice;
     }
 
     public static void addBook(Inventory inventory) {
@@ -65,7 +71,7 @@ public class MillerRaymone_Asgn1 {
 
     public static double getUserNumber(
         String prompt, Predicate<Double> invalid) {
-        Scanner scan = new Scanner(Systen.in);
+        Scanner scan = new Scanner(System.in);
         double input = -1;  // initialize input to prevent compile error
         boolean badInput = true;
         do {
