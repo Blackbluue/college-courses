@@ -6,8 +6,6 @@
  * Description: Create a Book Inventory interface
  */
 
-//package college_courses.cmis242.week1;
-
 import java.util.Map;
 import java.util.HashMap;
 
@@ -23,21 +21,16 @@ public class Inventory {
 
     /**
      * Adds the book to the inventory. If the book already exists, it will not
-     * be added again and an error message will be displayed.
+     * be added again.
      *
      * @param book The book to add to the inventory.
      * @return True if the book was added to the inventory.
      */
     public boolean add(Book book) {
-        if(book == null) {
-            System.out.println("Book cannot be null");
-            return false;
-        }
-        if(this.bookShelf.putIfAbsent(book.getId(), book) != null) {
-            System.out.println("Book already in the inventory");
-            return false;
-        }
-        return true;
+        if(book == null)
+            throw new NullPointerException();
+
+        return this.bookShelf.putIfAbsent(book.getId(), book) != null);
     }
 
     /**
