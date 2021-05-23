@@ -30,7 +30,7 @@ public class Inventory {
         if(book == null)
             throw new NullPointerException();
 
-        return this.bookShelf.putIfAbsent(book.getId(), book) != null);
+        return this.bookShelf.putIfAbsent(book.getId(), book) == null;
     }
 
     /**

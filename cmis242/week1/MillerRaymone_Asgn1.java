@@ -55,12 +55,12 @@ public class MillerRaymone_Asgn1 {
      */
     public static int displayMenu() {
         // display the menu
-        System.out.println("Please select one of the following options");
+        System.out.println("\nPlease select one of the following options");
         System.out.println("(1) Add");
         System.out.println("(2) Remove");
         System.out.println("(3) Find");
         System.out.println("(4) Display");
-        System.out.println("(0) Exit");
+        System.out.println("(0) Exit\n");
 
         // get user menu choice
         return (int) getUserNumber("Please select one of options above: ", input -> input < EXIT || input > DISPLAY);
@@ -76,14 +76,15 @@ public class MillerRaymone_Asgn1 {
     public static void addBook(Inventory inventory) {
         Scanner scan = new Scanner(System.in);
 
-        // accept all id values, invalid Predicate always returns false
+        System.out.println();
+        // accept all id values, 'invalid' Predicate always returns false
         // caste to int, decimal values will be truncated
         int id = (int) getUserNumber("What is the ID of the book: ", input -> false);
         // get title of the book
         System.out.print("What is the title of the book: ");
         String title = scan.nextLine();
-        // accept all price values, invalid Predicate always returns false
-        // negative prices wil be set to 0 in Book class
+        // accept all price values, 'invalid' Predicate always returns false
+        // negative prices will be set to 0 in Book class
         double price = getUserNumber("What is the price of the book: ", input -> false);
 
         if (!inventory.add(new Book(id, title, price)))
@@ -103,10 +104,10 @@ public class MillerRaymone_Asgn1 {
         // remove book if found
         Book book = inventory.remove(id);
         // display outcome to console
-        if(book)
-            System.out.printf("\"%s\" was removed from the inventory", book.getTitle());
+        if(book != null)
+            System.out.printf("\n\"%s\" was removed from the inventory", book.getTitle());
         else
-            System.out.println("Book was not in the inventory");
+            System.out.println("\nBook was not in the inventory");
     }
 
     /**
@@ -122,7 +123,8 @@ public class MillerRaymone_Asgn1 {
         // look for the book in the invnetory
         Book book = inventory.find(id);
         // display the book if found, print error message if not
-        if(book)
+        System.out.println();
+        if(book != null)
             book.display();
         else
             System.out.println("Book was not found");
@@ -137,6 +139,16 @@ public class MillerRaymone_Asgn1 {
         inventory.display();  // display every book in inventory
     }
 
+    /**
+     * Collect user numerical input. Returns a double value; cast to int if
+     * required. invalid is a predicate used to test user input. It should
+     * return true if user input is not valid, otherwise true. If input does not
+     * need to be checked, it should always return false.
+     *
+     * @param prompt The prompt to gives the user before collecting input.
+     * @param invalid A Predicate to check user input.
+     * @return The user input.
+     */
     public static double getUserNumber(
         String prompt, Predicate<Double> invalid) {
         Scanner scan = new Scanner(System.in);
@@ -150,10 +162,9 @@ public class MillerRaymone_Asgn1 {
                     System.out.println("\tValue is invalid. try again");
                 else
                     badInput = false;
-            } catch(InputMismatchException e) {
+            } catch(NumberFormatException e) {
                 // user entered a non-number
                 System.out.println("\tThat is not a number. Try again");
-                scan.nextLine();  // clear scanner of bad input
             }
         } while(badInput);
         return input;
