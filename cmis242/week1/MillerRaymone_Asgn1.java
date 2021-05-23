@@ -7,7 +7,6 @@
  */
 
 import java.util.Scanner;
-import java.util.InputMismatchException;
 import java.util.function.Predicate;
 
 public class MillerRaymone_Asgn1 {
