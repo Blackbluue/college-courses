@@ -9,28 +9,36 @@
 public static class Laser {
     // enum declarations
     public enum PowerSetting {
-        LOW(10, 1, "Low"),
-        MEDIUM(15, 2, "Medium"),
-        HIGH(25, 5, "High");
+        LOW(10, 0.5),
+        MEDIUM(15, 1.0),
+        HIGH(25, 2.0);
 
         // % charge used each time the laser is fired
         private final int chargeUsage;
         // multiplier for powerOutput
-        private final int outputMultiplier;
-        private final String setting;
+        private final double outputMultiplier;
 
-        PowerSetting(int chargeUsage, int outputMultiplier, String setting) {
+        PowerSetting(int chargeUsage, double outputMultiplier) {
             this.chargeUsage = chargeUsage;
             this.outputMultiplier = outputMultiplier;
-            this.setting = setting;
         }
 
         public int chargeUsage() { return chargeUsage; }
-        public int outputMultiplier() { return outputMultiplier; }
-        public String setting() { return setting; }
+        public double outputMultiplier() { return outputMultiplier; }
     }
     private enum LaserType {
-        TYPE_GAS, TYPE_LIQUID, TYPE_SOLID
+        TYPE_GAS(5.0),
+        TYPE_LIQUID(7.0),
+        TYPE_SOLID(10.0);
+
+        // base power output
+        private final double baseOutput;
+
+        LaserType(double baseOutput) {
+            this.baseOutput = baseOutput;
+        }
+
+        public double baseOutput() { return baseOutput; }
     }
     // constant declarations
     public static final PowerSetting LOW = PowerSetting.LOW;
@@ -47,16 +55,29 @@ public static class Laser {
     // determines powr output
     private LaserType type;
     // energy output of the laser
-    private int powerOutput;
+    private double powerOutput;
 
     /**
      * Default constructor.
      */
     private Laser() {
+        // build a laser with default values
+        Laser(MEDIUM, TYPE_SOLID);
+    }
+
+    /**
+     * Create a Laser object with the specific power setting and laser type.
+     *
+     * @param setting The power setting for the laser.
+     * @param type The type for the laser.
+     */
+    public Laser(PowerSetting setting, LaserType type) {
         // initial charge is 100%
         this.charge = 100;
-        this.setting = MEDIUM;
-        this.type = TYPE_SOLID;
+        // either PowerSetting or LaserType needs to be manually set before the other
+        // since both setter methods refer to the other
+        this.PowerSetting = setting;
+        setType(type);
     }
 
     /**
@@ -70,22 +91,73 @@ public static class Laser {
 
     /**
      * Charge the battery of the laser to 100%. Can only be done if
-     * the charge is 50% or lower.
+     * the charge is equal to or lower than the minimum requirement,
+     * which is twice the amount needed to fire the laser at the current
+     * power setting.
      */
     public void chargeBattery() {
-        if(this.charge <= 50) { // check if charge is less than 50%
+        // check if the minimum reuirement for charging is met
+        if(this.charge <= setting.chargeUsage * 2) {
             System.out.println("Charging battery...");
             this.charge = 100;
-        } else {  // if not less than or equal to 50%, do not charge
+        } else {  // if not less than minimum reuirement, do not charge
             System.out.println("Battery not low enough.");
         }
     }
 
-    public 
+    /**
+     * Return the current power setting for the laser.
+     *
+     * @return The laser's current power setting.
+     */
+    public PowerSetting getPowerSetting() {
+        return this.setting;
+    }
 
     /**
-     * Fire the laser. Each firing using 10% charge. The laser will not
-     * fire if the charge is 0%.
+     * Set the power setting for the laser. This will also affect power output.
+     *
+     * @param setting The setting for the laser.
+     */
+    public void setPowerSetting(PowerSetting setting) {
+        this.setting = setting;
+        // the power setting also affects power output
+        this.powerOutput = type.baseOutput * setting.outputMultiplier;
+    }
+
+    /**
+     * Return the laser's current type.
+     *
+     * @return The laser's current type.
+     */
+    public LaserType getType() {
+        return this.type;
+    }
+
+    /**
+     * Set the laser type for this laser. This also affects the power output.
+     *
+     * @param type The new type for the laser.
+     */
+    public void setType(LaserType type) {
+        this.type = type;
+        // laser type also affects power output
+        this.powerOutput = type.baseOutput * setting.outputMultiplier;
+    }
+
+    /**
+     * Return the expected output of the laser if it would fire with the
+     * current settings.
+     *
+     * @return The expected power output of the laser.
+     */
+    public double getPowerOutput() {
+        return this.powerOutput;
+    }
+
+    /**
+     * Fire the laser. Charge consumed is determined by the power setting.
+     * The laser will not fire if the charge is not high enough.
      *
      * @return An int representing the charge of the laser after firing.
      */
