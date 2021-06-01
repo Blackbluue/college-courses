@@ -1,12 +1,12 @@
- /**
-  * File: Laser.java
-  * Author: Miller, Raymone
-  * Class:  CMIS 242 - Discussion 2
-  * Creation Date: (25MAY21)
-  * Description: Model of a Laser
-  */
+/**
+ * File: Laser.java
+ * Author: Miller, Raymone
+ * Class:  CMIS 242 - Discussion 2
+ * Creation Date: (25MAY21)
+ * Description: Model of a Laser
+ */
 
-public static class Laser {
+public class Laser {
     // enum declarations
     public enum PowerSetting {
         LOW(10, 0.5),
@@ -26,7 +26,7 @@ public static class Laser {
         public int chargeUsage() { return chargeUsage; }
         public double outputMultiplier() { return outputMultiplier; }
     }
-    private enum LaserType {
+    public enum LaserType {
         TYPE_GAS(5.0),
         TYPE_LIQUID(7.0),
         TYPE_SOLID(10.0);
@@ -52,7 +52,7 @@ public static class Laser {
     private int charge;
     // affects charge usage and power output
     private PowerSetting setting;
-    // determines powr output
+    // determines power output
     private LaserType type;
     // energy output of the laser
     private double powerOutput;
@@ -62,7 +62,7 @@ public static class Laser {
      */
     private Laser() {
         // build a laser with default values
-        Laser(MEDIUM, TYPE_SOLID);
+        this(MEDIUM, TYPE_SOLID);
     }
 
     /**
@@ -76,7 +76,7 @@ public static class Laser {
         this.charge = 100;
         // either PowerSetting or LaserType needs to be manually set before the other
         // since both setter methods refer to the other
-        this.PowerSetting = setting;
+        this.setting = setting;
         setType(type);
     }
 
@@ -159,19 +159,22 @@ public static class Laser {
      * Fire the laser. Charge consumed is determined by the power setting.
      * The laser will not fire if the charge is not high enough.
      *
-     * @return An int representing the charge of the laser after firing.
+     * @return The output of the laser firing, or 0 if the laser did not fire.
      */
-    public int fireLaser() {
-        if(this.charge <= 0) {  // only fire laser if it has a charge
-            System.out.println("Battery has no charge left.");
+    public double fireLaser() {
+        if(this.charge < setting.chargeUsage) {  // only fire laser if it has a charge
+            System.out.println("Battery has too little charge left.");
+            return 0;
         } else {
-            System.out.println("Firing laser..");
-            this.charge -= 10;
+            System.out.printf("Firing laser.. Output = %.2f\n", powerOutput);
+            this.charge -= setting.chargeUsage;
+            return this.powerOutput;  // return power output of laser
         }
-        return this.charge;  // return current charge of laser
     }
 
     public String toString() {
-        return String.format("The Laser currently has a charge of %d", this.charge);
+        return String.format(
+        "The Laser currently has a charge of %d, power setting of %s, is of type %s, and has an output of %.2f",
+        this.charge, setting, type, powerOutput);
     }
 }
