@@ -26,6 +26,13 @@ public class VideoGame {
     }
 
     protected void playGame() {
+        System.out.printf("Starting game %s\n", title);
         this.playTime++;
+    }
+
+    public String toString() {
+        return String.format(
+            "Game title: %s; Player count: %d; Play time: %d",
+            title, maxPlayerCount, playTime);
     }
 }
