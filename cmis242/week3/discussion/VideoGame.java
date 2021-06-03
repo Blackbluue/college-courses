@@ -9,6 +9,7 @@
 public class VideoGame {
     private String title;
     private int maxPlayerCount;
+    // total game play time in hours
     private int playTime;
 
     protected VideoGame(String title, int maxPlayerCount) {

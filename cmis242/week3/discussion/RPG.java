@@ -15,7 +15,7 @@ public class RPG extends VideoGame {
     private int exp;
 
     public RPG(String title, String mainCharacterName) {
-        super(title, 1);
+        super(title, 1);  // maxPlayerCount = 1
         this.mainCharacterName = mainCharacterName;
         this.characterLevel = 1;
         this.exp = 0;
@@ -29,24 +29,22 @@ public class RPG extends VideoGame {
         return characterLevel;
     }
 
-    public void levelUp() {
-        // level cap is 100
-        if(characterLevel < LEVEL_CAP)
+    public void gainExp() {
+        // note that exp has no upper limit if level cap is reached
+        exp += 10;
+        // level up if exp hits threshold
+        if(exp >= EXP_CAP && characterLevel < LEVEL_CAP) {
+            System.out.printf("%s has leveled up!\n", mainCharacterName);
             characterLevel++;
+            exp = 0;
+        }
     }
 
     public void playGame() {
         // call super method to increment play time
         super.playGame();
         System.out.printf("%s has gone adventuring...\n", mainCharacterName);
-        // gain exp
-        exp += 10;
-        // level up if exp hits threshold
-        if(exp >= EXP_CAP && characterLevel < LEVEL_CAP) {
-            System.out.printf("%s has leveled up!\n", mainCharacterName);
-            levelUp();
-            exp = 0;
-        }
+        gainExp();
     }
 
     public String toString() {
