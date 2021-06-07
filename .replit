@@ -1,4 +1,3 @@
 language = "java10"
-# run = "java cmis242/Week1/MillerRaymone_Week1Disc.java"
-# run = "java cmis242/week1/MillerRaymone_Asgn1.java"
-run = "java main.java"
+run = "cd ~/collegecourses/cmis242/week3/discussion/ && java ~/collegecourses/cmis242/week3/discussion/MillerRaymone_Week3Disc.java"
+# run = "java main.java"

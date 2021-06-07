@@ -6,44 +6,54 @@
  * Description: 
  */
 
-import java.util.Random;
-
 public class FightingGame extends VideoGame {
-    // 4 rounds in a 16-entry tournament
-    private static final int MAX_ROUND = 4;
-    // made static so the pseudo randomness is not reset
-    private static final Random FIGHT_CHECKER = new Random();
-
+    private int maxRounds;
     private int tournamentRound;
 
-    public FightingGame(String title) {
+    public FightingGame(String title, int maxRounds) {
         super(title, 2);  // maxPlayerCount = 2
         this.tournamentRound = 1;
+        // must have at least 1 round
+        if(maxRounds <= 0)
+            this.maxRounds = 1;
+        else
+            this.maxRounds = maxRounds;
     }
 
     public int getTournamentRound() {
         return tournamentRound;
     }
 
+    public int getMaxRounds() {
+        return maxRounds;
+    }
+
     public void fightRound() {
         // check if fight is won
-        if(FIGHT_CHECKER.nextBoolean()) {
+        if(Math.random() < 0.5) { // 50-50 chance true/false
             System.out.printf("Round %d victory!\n", tournamentRound);
             tournamentRound++;
-            if(tournamentRound > MAX_ROUND) {
+            if(tournamentRound > maxRounds) {
                 System.out.println("You are the CHAMPION!");
-                tournamentRound = 0;
+                tournamentRound = 1;
             }
         } else {
             System.out.printf("Round %d lost\n", tournamentRound);
-            tournamentRound = 0;
+            tournamentRound = 1;
         }
     }
 
     public void playGame() {
         // call super method to increment play time
         super.playGame();
-        System.out.printf("Fighting in tournament round %d", tournamentRound);
+        System.out.printf("Fighting in tournament round %d ", tournamentRound);
         fightRound();
+    }
+
+    public String toString() {
+        String oldString = super.toString();
+        String newString = String.format("; Max Rounds: %d; Current Round: %d;",
+            maxRounds, tournamentRound);
+        return oldString + newString; 
     }
 }

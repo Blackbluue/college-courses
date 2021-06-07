@@ -49,7 +49,7 @@ public class RPG extends VideoGame {
 
     public String toString() {
         String oldString = super.toString();
-        String newString = String.format("; Character name: %s; Character level: %d; Experience: %d",
+        String newString = String.format("; Character Name: %s; Character Level: %d; Experience: %d",
             mainCharacterName, characterLevel, exp);
         return oldString + newString; 
     }
