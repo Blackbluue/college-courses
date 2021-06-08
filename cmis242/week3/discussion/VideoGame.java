@@ -3,7 +3,7 @@
  * Author: Miller, Raymone
  * Class:  CMIS 242 - Discussion 3
  * Creation Date: (02JUN21)
- * Description: 
+ * Description: Design 2 child classes, based off a video game class
  */
 
 public class VideoGame {
@@ -12,25 +12,47 @@ public class VideoGame {
     // total game play time in hours
     private int playTime;
 
+    /**
+     * Constructor for VideoGame.
+     */
     protected VideoGame(String title, int maxPlayerCount) {
         this.title = title;
         this.maxPlayerCount = maxPlayerCount;
         this.playTime = 0;
     }
 
+    /**
+     * Returns the game's title.
+     *
+     * @return The game's title.
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Returns the maximum player count.
+     *
+     * @return The maximum player count.
+     */
     public int getMaxPlayercount() {
         return maxPlayerCount;
     }
 
+    /**
+     * Play the video game, accumulating play time. Additional features apply based on
+     * specific game type.
+     */
     protected void playGame() {
         System.out.printf("Starting game %s\n", title);
         this.playTime++;
     }
 
+    /**
+     * Return the string representation of this object.
+     *
+     * @return The string representation of this object.
+     */
     public String toString() {
         return String.format(
             "Game title: %s; Player count: %d; Play time: %d",

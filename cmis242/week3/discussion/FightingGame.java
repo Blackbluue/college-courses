@@ -3,13 +3,16 @@
  * Author: Miller, Raymone
  * Class:  CMIS 242 - Discussion 3
  * Creation Date: (02JUN21)
- * Description: 
+ * Description: Design 2 child classes, based off a video game class
  */
 
 public class FightingGame extends VideoGame {
     private int maxRounds;
     private int tournamentRound;
 
+    /**
+     * Constructor for FightingGame.
+     */
     public FightingGame(String title, int maxRounds) {
         super(title, 2);  // maxPlayerCount = 2
         this.tournamentRound = 1;
@@ -20,14 +23,27 @@ public class FightingGame extends VideoGame {
             this.maxRounds = maxRounds;
     }
 
+    /**
+     * Return the current tournament round.
+     *
+     * @return The current torunament round.
+     */
     public int getTournamentRound() {
         return tournamentRound;
     }
 
+    /**
+     * Return the maximum tournament rounds.
+     *
+     * @return The maximum tournament rounds.
+     */
     public int getMaxRounds() {
         return maxRounds;
     }
 
+    /**
+     * Fight a round in the tournament, advancing if the fight is won.
+     */
     public void fightRound() {
         // check if fight is won
         if(Math.random() < 0.5) { // 50-50 chance true/false
@@ -43,6 +59,10 @@ public class FightingGame extends VideoGame {
         }
     }
 
+    /**
+     * Play the video game, accumulating play time. Additional features apply based on
+     * specific game type.
+     */
     public void playGame() {
         // call super method to increment play time
         super.playGame();
@@ -50,6 +70,11 @@ public class FightingGame extends VideoGame {
         fightRound();
     }
 
+    /**
+     * Return the string representation of this object.
+     *
+     * @return The string representation of this object.
+     */
     public String toString() {
         String oldString = super.toString();
         String newString = String.format("; Max Rounds: %d; Current Round: %d;",
