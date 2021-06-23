@@ -6,40 +6,52 @@
  * Description: 
  */
 
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 public class OrderSystem {
-    private final int ORDER = 1;
-    private final int CHANGE = 2;
-    private final int DISPLAY = 3;
-    private final int EXIT = 9;
+    // constants
+    private static final int ORDER = 1;
+    private static final int CHANGE = 2;
+    private static final int DISPLAY = 3;
+    private static final int EXIT = 9;
 
     private Map<String, Gift> gifts;
     private int choice;
 
+    /**
+     * Constructor for OrderSystem.
+     */
     public OrderSystem() {
         gifts = new HashMap<>();
     }
 
+    /**
+     * Main method of program.
+     *
+     * @param args The program arguments.
+     */
     public static void main(String[] args) {
         OrderSystem orders = new OrderSystem();
 
-        while(orders.choice != orders.EXIT) {
+        // choose which menu option to run
+        while(orders.choice != EXIT) {
             orders.displayMenu();
             switch(orders.choice) {
-                case orders.ORDER:
+                case ORDER:
                     orders.orderGift();
                     break;
-                case orders.CHANGE:
+                case CHANGE:
                     orders.changeGift();
                     break;
-                case orders.DISPLAY:
+                case DISPLAY:
                     orders.displayGift();
                     break;
-                case orders.EXIT:
-                    System.out.println("Thank you for using our order system!");
+                case EXIT:
+                    System.out.println("\nThank you for using the program. Goodbye!");
                     break;
                 default:
                     System.out.println("Choice not recognized");
@@ -60,7 +72,7 @@ public class OrderSystem {
         System.out.println("9: Exit program\n");
 
         // get user menu choice
-        this.choice = this.getUserNumber("Enter your selection : ", input -> input < EXIT || input > DISPLAY);
+        this.choice = this.getUserNumber("Enter your selection : ", input -> input < ORDER || input > EXIT);
     }
 
     /**
@@ -72,14 +84,15 @@ public class OrderSystem {
         Scanner scan = new Scanner(System.in);
         boolean invalidInput = true;
         Gift gift;
-        String giftType;
-        String size;
+        String giftType = "";
+        String size = "";
+        String includeExtraStr = "";
         boolean includeExtra;
 
         while(invalidInput) {
             System.out.print("Do you want Fruit Basket (1) or Sweets Basket (2): ");
             giftType = scan.nextLine();
-            if(!giftType.equals(FRUIT) || !giftType.equals(SWEET))
+            if(!giftType.equals(FRUIT) && !giftType.equals(SWEET))
                 System.out.println("Not a valid choice");
             else
                 invalidInput = false;
@@ -101,8 +114,8 @@ public class OrderSystem {
                 System.out.print("Do you want citrus fruits included? true/false: ");
             else
                 System.out.print("Do you want nuts included? true/false: ");
-            includeExtraString = scan.nextLine();
-            if(!includeExtraStr.equals("true") || !includeExtraStr.equals("false"))
+            includeExtraStr = scan.nextLine();
+            if(!includeExtraStr.equals("true") && !includeExtraStr.equals("false"))
                 System.out.println("Not a valid choice");
             else
                 invalidInput = false;
@@ -115,12 +128,19 @@ public class OrderSystem {
         this.gifts.put(gift.getID(), gift);
     }
 
+    /**
+     * Change some attribute of an existing gift order.
+     */
     public void changeGift() {
+        if(this.gifts.isEmpty()) {
+            System.out.println("No gift has been ordered yet");
+            return;
+        }
         Scanner scan = new Scanner(System.in);
         boolean invalidInput = true;
         Gift gift;
-        String size;
-        boolean includeExtra;
+        String size = "";
+        String includeExtraStr = "";
 
         System.out.print("Enter the Id of the gift you want to change: ");
         gift = this.gifts.get(scan.nextLine());
@@ -136,6 +156,37 @@ public class OrderSystem {
                 System.out.println("Not a valid choice");
             else
                 invalidInput = false;
+        }
+        gift.setSize(size);
+
+        invalidInput = true;
+        while(invalidInput) {
+            if(gift instanceof FruitBasket)
+                System.out.printf("Current basket citrus=%b Do you want citrus fruits included? true/false: ", ((FruitBasket) gift).isIncludeCitrus());
+            else
+                System.out.printf("Current basket nuts=%b Do you want nuts included? true/false: ", ((SweetsBasket) gift).isIncludeNuts());
+            includeExtraStr = scan.nextLine();
+            if(!includeExtraStr.equals("true") && !includeExtraStr.equals("false"))
+                System.out.println("Not a valid choice");
+            else
+                invalidInput = false;
+        }
+        if(gift instanceof FruitBasket)
+            ((FruitBasket) gift).setIncludeCitrus(Boolean.valueOf(includeExtraStr));
+        else
+            ((SweetsBasket) gift).setIncludeNuts(Boolean.valueOf(includeExtraStr));
+    }
+
+    /**
+     * Display the details on all ordered gifts.
+     */
+    public void displayGift() {
+        if(this.gifts.isEmpty()) {
+            System.out.println("\nNo gift has been ordered yet");
+        } else {
+            System.out.println();
+            for(Gift gift: this.gifts.values())
+                System.out.println(gift);
         }
     }
 
